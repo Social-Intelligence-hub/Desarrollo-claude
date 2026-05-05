@@ -38,14 +38,12 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Playwright browser dependencies
-        run: |
-          python -m playwright install-deps
-
-      - name: Install Playwright Chromium
+      - name: Install Playwright Chromium and dependencies
         working-directory: ./social-intelligence-hub/scraper
         run: |
-          python -m playwright install chromium
+          sudo apt-get update
+          sudo apt-get install -y libasound2 libasound2t64 libasound2-data || sudo apt-get install -y libasound2t64 libasound2-data
+          python -m playwright install chromium --with-deps
 
       - name: Run social listening scraper
         working-directory: ./social-intelligence-hub/scraper
