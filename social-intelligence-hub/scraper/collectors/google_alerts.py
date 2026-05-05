@@ -11,6 +11,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 from urllib.parse import quote_plus, unquote
 
+from collectors.relevance_filter import es_relevante_dominicana
+
 logger = logging.getLogger(__name__)
 
 try:
@@ -52,7 +54,15 @@ PUBLIC_RSS_FEEDS = {
 # Términos de búsqueda por entidad (para filtrar resultados de RSS públicos)
 SEARCH_TERMS = {
     "czfs": {
-        "phrases": ["zona franca santiago", "corporacion zona franca", "corporación zona franca", "parque industrial santiago"],
+        "phrases": [
+            "zona franca santiago",
+            "zona franca santiago dominicana",
+            "zona franca santiago mera",
+            "czfs santiago",
+            "corporacion zona franca santiago",
+            "corporación zona franca santiago",
+            "parque industrial santiago",
+        ],
         "keywords": ["czfs", "zona franca", "pivem", "corporacion", "corporación"],
         "core": ["czfs", "pivem", "zona franca"] # Al menos una de estas debe estar presente si no hay frase
     },
@@ -83,6 +93,8 @@ GOOGLE_NEWS_QUERIES = {
     "czfs": [
         "Corporación Zona Franca Santiago",
         "CZFS Santiago",
+        "Zona Franca Santiago Dominicana",
+        "Zona Franca Santiago Mera",
     ],
     "capex-institucion": [
         "CAPEX Santiago capacitación",
@@ -126,31 +138,8 @@ def detect_language(text: str) -> str:
 
 
 def _is_relevant(text: str, entity_slug: str) -> bool:
-    """
-    Stricter relevance check:
-    1. At least ONE exact phrase match.
-    OR
-    2. At least ONE 'core' keyword AND one other keyword.
-    """
-    terms = SEARCH_TERMS.get(entity_slug)
-    if not terms:
-        return False
-
-    combined = text.lower()
-
-    # 1. Check exact phrases first — one match is enough
-    for phrase in terms.get("phrases", []):
-        if phrase in combined:
-            return True
-
-    # 2. Check core keywords
-    has_core = any(core in combined for core in terms.get("core", []))
-    if not has_core:
-        return False
-
-    # 3. Require at least one other keyword or phrase component
-    keyword_hits = sum(1 for kw in terms.get("keywords", []) if kw in combined)
-    return keyword_hits >= 2
+    """Aplica el filtro centralizado de relevancia para la entidad dada."""
+    return es_relevante_dominicana(text, entity_slug)
 
 
 class GoogleAlertsCollector:
@@ -186,8 +175,8 @@ class GoogleAlertsCollector:
             return []
 
         if "USERID" in feed_url or "ALERTID" in feed_url:
-            logger.info(f"Feed no configurado para {entity_slug}, saltando...")
-            return self._get_demo_news_mentions(entity_slug)
+            logger.info(f"Feed no configurado para {entity_slug}, retornando vacío (prohibido inventar datos)...")
+            return []
 
         mentions = []
         try:
@@ -418,110 +407,3 @@ class GoogleAlertsCollector:
             if match:
                 return unquote(match.group(1))
         return google_alerts_url
-
-    def _get_demo_news_mentions(self, entity_slug: str) -> list[dict]:
-        """Datos demo para cuando los feeds no están configurados."""
-        demo_items = {
-            "czfs": [
-                {
-                    "text": "La Corporación Zona Franca Santiago anuncia expansión de sus instalaciones industriales para 2026, generando 500 nuevos empleos en la región norte.",
-                    "author": "El Nacional",
-                    "url": "https://elnacional.com.do/czfs-expansion-2026",
-                    "sentiment": "positive",
-                    "days_ago": 2,
-                },
-                {
-                    "text": "CZFS presenta nuevo programa de responsabilidad social empresarial enfocado en comunidades aledañas al PIVEM.",
-                    "author": "Listín Diario",
-                    "url": "https://listindiario.com/czfs-rse",
-                    "sentiment": "positive",
-                    "days_ago": 8,
-                },
-            ],
-            "capex-institucion": [
-                {
-                    "text": "CAPEX Santiago graduó a 200 técnicos en mecatrónica y automatización industrial, respondiendo a la demanda del sector manufacturero.",
-                    "author": "Diario Libre",
-                    "url": "https://diariolibre.com/capex-graduacion-2026",
-                    "sentiment": "positive",
-                    "days_ago": 5,
-                },
-                {
-                    "text": "Nuevos cursos de inteligencia artificial y ciberseguridad en CAPEX Santiago buscan cubrir brechas de habilidades digitales en el Cibao.",
-                    "author": "El Caribe",
-                    "url": "https://elcaribe.com.do/capex-ia-cursos",
-                    "sentiment": "positive",
-                    "days_ago": 14,
-                },
-            ],
-            "pivem": [
-                {
-                    "text": "El Parque Industrial Villa Europa Mediterráneo (PIVEM) reporta ocupación récord con nuevas empresas tecnológicas instalándose en sus naves.",
-                    "author": "El Nacional",
-                    "url": "https://elnacional.com.do/pivem-ocupacion-record",
-                    "sentiment": "positive",
-                    "days_ago": 3,
-                },
-            ],
-            "plazona": [
-                {
-                    "text": "Plazona Santiago inaugura nueva área de entretenimiento familiar con cines y espacios recreativos modernos.",
-                    "author": "Listín Diario",
-                    "url": "https://listindiario.com/plazona-inauguracion",
-                    "sentiment": "positive",
-                    "days_ago": 11,
-                },
-            ],
-            "medica-czfs": [
-                {
-                    "text": "El centro médico de la Zona Franca Santiago amplía sus servicios de salud ocupacional para empleados del parque industrial.",
-                    "author": "Diario Libre",
-                    "url": "https://diariolibre.com/medica-czfs-ampliacion",
-                    "sentiment": "positive",
-                    "days_ago": 19,
-                },
-            ],
-        }
-
-        items = demo_items.get(entity_slug, [])
-        mentions = []
-
-        now = datetime.now(timezone.utc)
-
-        for item in items:
-            content_hash = hashlib.sha256(
-                f"demo:news:{entity_slug}:{item['url']}".encode()
-            ).hexdigest()
-
-            sentiment_result = {"label": item["sentiment"],
-                               "scores": {"positive": 0.85, "negative": 0.05, "neutral": 0.10},
-                               "confidence": 0.85, "dominican_override": False, "dominican_term": None}
-            if self.analyzer:
-                sentiment_result = self.analyzer.analyze(item["text"])
-
-            # Spread demo dates realistically across the last 30 days
-            days_ago = item.get("days_ago", random.randint(1, 30))
-            hours_offset = random.randint(0, 12)
-            published_at = (now - timedelta(days=days_ago, hours=hours_offset)).isoformat()
-
-            language = detect_language(item["text"])
-
-            mentions.append({
-                "entity_slug": entity_slug,
-                "source_slug": "news_web",
-                "text_original": item["text"],
-                "author_name": item["author"],
-                "source_url": item["url"],
-                "star_rating": None,
-                "sentiment_label": sentiment_result["label"],
-                "sentiment_score": sentiment_result["scores"],
-                "confidence_score": sentiment_result["confidence"],
-                "dominican_override": sentiment_result.get("dominican_override", False),
-                "dominican_term_found": sentiment_result.get("dominican_term"),
-                "published_at": published_at,
-                "language": language,
-                "location_hint": "República Dominicana",
-                "content_hash": content_hash,
-            })
-
-        return mentions

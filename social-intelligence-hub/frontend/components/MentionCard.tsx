@@ -96,6 +96,11 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
               {sourceName}
             </span>
 
+            {/* Entidad */}
+            <span className="text-xs px-2 py-0.5 rounded font-medium border bg-slate-100 text-slate-700 border-slate-200">
+              {mention.entities?.name ?? "General"}
+            </span>
+
             {/* Idioma */}
             <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-mono border">
               {langLabel}

@@ -179,66 +179,30 @@ export async function fetchMentions(params: {
   limit?: number;
   offset?: number;
 }): Promise<{ data: Mention[]; count: number }> {
-  const {
-    entitySlug,
-    sentiment,
-    sourceSlug,
-    searchQuery,
-    dateFrom,
-    dateTo,
-    limit = 20,
-    offset = 0,
-  } = params;
+  // Ignorar todos los params para traer todo sin filtros
+  const limit = 50;
+  const offset = 0;
 
+  // Cambiamos entities!inner a entities (LEFT JOIN) para que no oculte menciones sin entidad
   let query = supabase
     .from("mentions")
     .select(
-      `*, entities!inner(id, slug, name, category), sources(id, slug, name)`,
+      `*, entities(id, slug, name, category), sources(id, slug, name)`,
       { count: "exact" }
     )
     .order("published_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
-  // Filtro por entidad
-  if (entitySlug && entitySlug !== "all") {
-    query = query.eq("entities.slug", entitySlug);
-  }
-
-  // Filtro por sentimiento
-  if (sentiment && sentiment !== "all") {
-    query = query.eq("sentiment_label", sentiment);
-  }
-
-  // Filtro por fuente
-  if (sourceSlug && sourceSlug !== "all") {
-    const { data: source } = await supabase
-      .from("sources")
-      .select("id")
-      .eq("slug", sourceSlug)
-      .single();
-    if (source) {
-      query = query.eq("source_id", source.id);
-    }
-  }
-
-  // Filtro por texto
-  if (searchQuery) {
-    query = query.ilike("text_original", `%${searchQuery}%`);
-  }
-
-  // Filtro por rango de fechas
-  if (dateFrom) {
-    query = query.gte("published_at", dateFrom);
-  }
-  if (dateTo) {
-    query = query.lte("published_at", dateTo);
-  }
+  // Filtros eliminados temporalmente según la instrucción del usuario
 
   const { data, error, count } = await query;
   if (error) {
     console.error("fetchMentions error:", error.message);
     throw new Error(`Error en mentions: ${error.message}`);
   }
+  
+  console.log("=== DATOS OBTENIDOS POR FETCHMENTIONS (SIN FILTROS) ===", data);
+  
   return { data: (data as Mention[]) || [], count: count || 0 };
 }
 

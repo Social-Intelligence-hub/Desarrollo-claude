@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 import requests
+from collectors.relevance_filter import es_relevante_dominicana
 
 logger = logging.getLogger(__name__)
 
@@ -30,36 +31,26 @@ TARGET_SUBREDDITS = [
 # Términos de búsqueda por entidad
 SEARCH_CONFIGS = {
     "czfs": {
-        "terms": ["zona franca santiago", "czfs", "pivem", "corporacion zona franca"],
+        "terms": [
+            "zona franca santiago dominicana",
+            "zona franca santiago mera",
+            "czfs santiago",
+            "corporacion zona franca santiago",
+            "corporación zona franca santiago",
+        ],
         "entity_slug": "czfs",
     },
     "capex-institucion": {
         "terms": [
-            "capex santiago", "capex capacitacion", "capex rd",
-            "capex taller", "capex egresados", "capex formacion"
+            "capex santiago", "capex capacitacion", "capex capacitación", "capex rd",
+            "capex taller", "capex egresados", "capex formacion", "capex formación"
         ],
         "entity_slug": "capex-institucion",
     },
     "pivem": {
-        "terms": ["pivem", "parque industrial villa europa"],
+        "terms": ["pivem", "parque industrial villa europa", "parque industrial villa europa mediterráneo"],
         "entity_slug": "pivem",
     },
-}
-
-# Keywords de relevancia por entidad — si el texto no contiene al menos uno,
-# el post se descarta como irrelevante.
-RELEVANCE_KEYWORDS = {
-    "czfs": [
-        "zona franca", "czfs", "pivem", "corporacion", "santiago",
-        "parque industrial", "plazona",
-    ],
-    "capex-institucion": [
-        "capex", "capacitacion", "capacitación", "taller", "curso",
-        "formacion", "formación", "egresado",
-    ],
-    "pivem": [
-        "pivem", "parque industrial", "villa europa",
-    ],
 }
 
 REDDIT_BASE = "https://www.reddit.com"
@@ -132,22 +123,10 @@ class RedditCollector:
 
     def _is_relevant(self, text: str, entity_slug: str, search_query: str) -> bool:
         """
-        Verifica que el post realmente mencione keywords de la entidad.
-        Retorna False si el texto no contiene ninguna keyword relevante,
-        lo que indica que el resultado de búsqueda es ruido (ej: mercado
-        financiero, política rumana, etc.).
+        Verifica que el post realmente sea relevante para CZFS/CAPEX.
+        Usa el filtro centralizado que bloquea todo el ruido geográfico erróneo.
         """
-        keywords = RELEVANCE_KEYWORDS.get(entity_slug, [])
-        if not keywords:
-            # Si no hay keywords configurados para esta entidad, aceptar todo
-            return True
-
-        text_lower = text.lower()
-        for keyword in keywords:
-            if keyword.lower() in text_lower:
-                return True
-
-        return False
+        return es_relevante_dominicana(text, entity_slug)
 
     def _format_post(
         self, post: dict, entity_slug: str, search_query: str

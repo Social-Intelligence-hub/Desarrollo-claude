@@ -242,6 +242,8 @@ export default function DashboardPage() {
     const { skip, effectiveEntity, effectiveQuery } = resolveEffectiveFilters();
 
     if (!skip) {
+      loadStats(from, to, effectiveEntity, effectiveQuery);
+      loadCharts(effectiveEntity, from, to, effectiveQuery);
       loadMentions({
         entitySlug: effectiveEntity,
         sentiment: state.selectedSentiment,
@@ -726,6 +728,7 @@ export default function DashboardPage() {
           )}
 
           {/* Grid de menciones */}
+          {console.log("Mentions in render:", state.mentions)}
           {state.loadingMentions ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 max-w-7xl mx-auto">
               {Array.from({ length: 6 }).map((_, i) => <MentionCardSkeleton key={i} />)}

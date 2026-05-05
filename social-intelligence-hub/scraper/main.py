@@ -219,10 +219,13 @@ async def run_google_reviews(supabase, analyzer, entity_map, source_map) -> int:
         try:
             logger.info(f"  Google Reviews: {location_key}")
             mentions = await collector.collect_reviews(location_key, max_reviews=20)
-            _, new = save_mentions(supabase, mentions, entity_map, source_map)
-            total_new += new
-            log_scraper_run(supabase, "google_reviews", location_key,
-                           "success", len(mentions), new, started_at=started)
+            if not mentions:
+                print(f"INFO: Fuente Google Reviews ({location_key}) revisada con éxito, pero no hay contenido nuevo")
+            else:
+                _, new = save_mentions(supabase, mentions, entity_map, source_map)
+                total_new += new
+                log_scraper_run(supabase, "google_reviews", location_key,
+                               "success", len(mentions), new, started_at=started)
         except Exception as e:
             logger.error(f"  Error en Google Reviews {location_key}: {e}")
             log_scraper_run(supabase, "google_reviews", location_key,
@@ -242,6 +245,8 @@ def run_google_alerts(supabase, analyzer, entity_map, source_map) -> int:
     if all_mentions:
         _, new = save_mentions(supabase, all_mentions, entity_map, source_map)
         total_new += new
+    else:
+        print("INFO: Fuente Google Alerts revisada con éxito, pero no hay contenido nuevo")
 
     # RSS de noticias dominicanas
     for entity_slug in ["czfs", "capex-institucion", "pivem"]:
@@ -252,6 +257,8 @@ def run_google_alerts(supabase, analyzer, entity_map, source_map) -> int:
                 total_new += new
                 log_scraper_run(supabase, "news_web", entity_slug,
                                "success", len(news_mentions), new, started_at=started)
+            else:
+                print(f"INFO: Fuente RSS Noticias ({entity_slug}) revisada con éxito, pero no hay contenido nuevo")
         except Exception as e:
             logger.error(f"  Error en news RSS {entity_slug}: {e}")
 
@@ -265,6 +272,10 @@ def run_reddit(supabase, analyzer, entity_map, source_map) -> int:
 
     try:
         mentions = collector.collect_all(max_per_term=10)
+        if not mentions:
+            print("INFO: Fuente Reddit revisada con éxito, pero no hay contenido nuevo")
+            return 0
+            
         _, new = save_mentions(supabase, mentions, entity_map, source_map)
         log_scraper_run(supabase, "reddit", "all",
                        "success", len(mentions), new, started_at=started)
@@ -321,6 +332,7 @@ async def run_all_collectors(supabase):
     logger.info("\n" + "=" * 60)
     logger.info(f"COMPLETADO. Total nuevas menciones: {total_new}")
     logger.info("=" * 60)
+    print(f"\nConexión con Supabase exitosa. Se intentaron guardar {total_new} filas")
 
     return total_new
 
@@ -333,10 +345,7 @@ def main():
         "--schedule", action="store_true",
         help="Ejecutar en modo programado cada 12 horas"
     )
-    parser.add_argument(
-        "--demo", action="store_true",
-        help="Solo insertar datos de demostracion"
-    )
+
     parser.add_argument(
         "--dry-run", action="store_true",
         help="Ejecutar sin guardar en base de datos"

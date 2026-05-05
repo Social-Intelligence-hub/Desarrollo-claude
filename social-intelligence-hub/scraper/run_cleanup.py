@@ -12,6 +12,7 @@ import re
 import logging
 from dotenv import load_dotenv
 from supabase import create_client
+from collectors.relevance_filter import es_relevante_dominicana
 
 # Cargar variables desde .env
 load_dotenv()
@@ -60,17 +61,15 @@ def run_cleanup():
         res = supabase.table("mentions").select("id, text_original, star_rating").execute()
         mentions = res.data or []
         
-        core_keywords = ["czfs", "zona franca", "capex", "pivem", "plazona", "medica czfs", "médica czfs", "corporacion zona franca", "corporación zona franca", "villa europa"]
         to_delete = []
         
         for m in mentions:
-            text = m["text_original"].lower()
+            text = m["text_original"]
             # Si es una reseña de Google (tiene estrellas), la dejamos
             if m.get("star_rating") is not None:
                 continue
-                
-            # Si no menciona ninguna de las palabras core, se borra
-            if not any(kw in text for kw in core_keywords):
+
+            if not es_relevante_dominicana(text):
                 to_delete.append(m["id"])
         
         if to_delete:
