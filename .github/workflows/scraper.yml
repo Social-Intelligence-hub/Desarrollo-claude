@@ -14,6 +14,7 @@ on:
 
 env:
   PYTHON_VERSION: "3.12"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   scrape:
@@ -38,12 +39,17 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Playwright Chromium and dependencies
+      - name: Install Playwright dependencies
         working-directory: ./social-intelligence-hub/scraper
         run: |
           sudo apt-get update
           sudo apt-get install -y libasound2 libasound2t64 libasound2-data || sudo apt-get install -y libasound2t64 libasound2-data
-          python -m playwright install chromium --with-deps
+          python -m playwright install-deps
+
+      - name: Install Playwright Chromium
+        working-directory: ./social-intelligence-hub/scraper
+        run: |
+          python -m playwright install chromium
 
       - name: Run social listening scraper
         working-directory: ./social-intelligence-hub/scraper
@@ -66,7 +72,7 @@ jobs:
         continue-on-error: true
         with:
           name: scraper-logs-${{ github.run_number }}
-          path: social-intelligence-hub/scraper/scraper.log
+          path: "**/scraper.log"
           retention-days: 7
 
       - name: Notify on failure
