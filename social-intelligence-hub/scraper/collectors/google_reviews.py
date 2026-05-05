@@ -98,12 +98,12 @@ class GoogleReviewsCollector:
                 await browser.close()
                 return reviews
 
-        except ImportError:
-            logger.warning("Playwright no disponible. Retornando datos demo.")
-            return self._get_demo_reviews(config)
+        except ImportError as e:
+            logger.error(f"Playwright no disponible: {e}")
+            return []
         except Exception as e:
             logger.error(f"Error recolectando reviews: {e}")
-            return self._get_demo_reviews(config)
+            return []
 
     async def _extract_reviews_from_page(
         self, page, config: dict, max_reviews: int
