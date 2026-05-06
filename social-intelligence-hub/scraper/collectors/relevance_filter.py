@@ -1,17 +1,18 @@
 import re
 
 BLACK_LIST_KEYWORDS = [
-    # Geográficos (Fuera de Santiago RD)
-    "chile", "scl", "valparaiso", "santiago de chile", "carabineros", "pesos chilenos", "audax", "vasco",
+    # SUPER_BLACKLIST (Ruido Internacional Crítico)
+    "mets", "mlb", "maradona", "messi", "irán", "iran", "hormuz", "ormuz", "rusia", "ucrania", "putin", "chile", "scl", "carabineros", "arriendos",
+    # Geográficos adicionales
+    "valparaiso", "santiago de chile", "pesos chilenos", "audax", "vasco",
     "santiago metro", "región metropolitana", "las condes", "providencia", "san isidro",
     "santo domingo este", "santo domingo", "distrito nacional", "hainamosa",
     "argentina", "buenos aires", "méxico", "mexico", "colombia", "bogotá", "bogota", "venezuela",
     # Deportes y otros ruidos
-    "messi", "maradona", "fútbol", "futbol", "gol", "fifa", "copa américa", "copa america",
-    "mets", "yankees", "red sox", "mlb", "grandes ligas", "beisbol", "baseball",
-    # Política Internacional y Conflictos
-    "irán", "iran", "hormuz", "ormuz", "estrecho", "rusia", "ucrania", "putin", "zelensky",
-    "israel", "gaza", "palestina",
+    "fútbol", "futbol", "gol", "fifa", "copa américa", "copa america",
+    "yankees", "red sox", "grandes ligas", "beisbol", "baseball",
+    # Política Internacional
+    "zelensky", "israel", "gaza", "palestina",
     # Términos Genéricos de Salud (Ruido para MÉDICA)
     "junta médica", "seguro médico", "atención médica", "facultad de medicina", "médica forense",
 ]
@@ -157,28 +158,47 @@ def es_relevante_dominicana(texto: str, entity_slug: str | None = None) -> bool:
     
     # 1. Filtro de Lista Negra (Inmediato)
     if has_blacklist_signal(text):
+        print("\n" + "!"*60)
+        print(f"!!! DESCARTADO POR RUIDO (Blacklist): {text[:100]}...")
+        print("!"*60 + "\n")
         return False
     if has_chile_domain(text):
+        print("\n" + "!"*60)
+        print(f"!!! DESCARTADO POR RUIDO (Dominio Chile): {text[:100]}...")
+        print("!"*60 + "\n")
         return False
 
-    # 2. Desambiguación Geográfica Positiva
-    is_santiago_rd = has_santiago(text) and (has_dominican_signal(text) or has_dominican_domain(text))
+    # 2. Desambiguación Geográfica Obligatoria para Santiago
+    # Si menciona "Santiago", DEBE mencionar Dominicana, RD, Cibao o Caballeros.
+    if "santiago" in text:
+        if not has_dominican_signal(text) and not has_dominican_domain(text):
+            print("\n" + "!"*60)
+            print(f"!!! DESCARTADO POR RUIDO (Santiago sin contexto RD): {text[:100]}...")
+            print("!"*60 + "\n")
+            return False
+
+    is_santiago_rd = has_dominican_signal(text) or has_dominican_domain(text)
     
     # 3. Lógica por Entidad
     if entity_slug == "capex-institucion":
-        # Requiere "capex" Y contexto educativo O Santiago RD
+        # DEBE contener al menos una palabra de educación para ser guardada
         has_capex = "capex" in text
-        has_edu_context = any(term in text for term in CAPEX_CONTEXT_TERMS)
-        return has_capex and (has_edu_context or is_santiago_rd)
+        has_edu_context = any(term in text for term in ["curso", "taller", "diplomado", "capacitacion", "estudio", "infotep"])
+        if not has_edu_context:
+            print("\n" + "!"*60)
+            print(f"!!! DESCARTADO POR RUIDO (CAPEX sin contexto educativo): {text[:100]}...")
+            print("!"*60 + "\n")
+            return False
+        return has_capex
 
     if entity_slug == "medica-czfs":
-        # Requiere "médica" Y contexto institucional de Santiago
+        # Requiere "médica" Y contexto institucional de Santiago RD
         has_medica = "médica" in text or "medica" in text
-        has_medica_context = any(term in text for term in ["czfs", "pivem", "zona franca", "santiago"])
+        has_medica_context = any(term in text for term in ["czfs", "pivem", "zona franca", "santiago", "rd", "dominicana"])
         return has_medica and has_medica_context
 
     if entity_slug == "pivem":
-        # PIVEM o empresas del parque
+        # PIVEM o empresas del parque en contexto RD
         has_pivem = "pivem" in text or "parque industrial" in text
         has_company = any(term in text for term in PIVEM_COMPANIES)
         return (has_pivem or has_company) and (is_santiago_rd or "santiago" in text)
@@ -192,8 +212,8 @@ def es_relevante_dominicana(texto: str, entity_slug: str | None = None) -> bool:
     if any(term in text for term in all_positive_terms):
         if is_santiago_rd:
             return True
-        # Si menciona una empresa específica y Santiago, lo damos por bueno
-        if any(term in text for term in PIVEM_COMPANIES) and "santiago" in text:
+        # Si menciona una empresa específica y Santiago RD
+        if any(term in text for term in PIVEM_COMPANIES) and "santiago" in text and is_santiago_rd:
             return True
 
     return False
