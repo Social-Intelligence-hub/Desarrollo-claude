@@ -63,6 +63,9 @@ def get_supabase_client():
 
 def verify_connection(supabase) -> bool:
     """Valida que Supabase sea alcanzable haciendo una consulta ligera."""
+    if not supabase:
+        logger.info("Modo DRY RUN: Omitiendo verificacion de conexion")
+        return True
     try:
         result = supabase.table("entities").select("id", count="exact").limit(1).execute()
         logger.info(f"Conexion a Supabase OK — {result.count} entidades registradas")
@@ -77,10 +80,13 @@ def preload_lookup_tables(supabase) -> tuple[dict, dict]:
     """
     Carga TODAS las entidades y fuentes de una sola vez.
     Retorna dos diccionarios: {slug: uuid}.
-    Esto elimina la necesidad de hacer un query por cada mención.
     """
     entity_map: dict[str, str] = {}
     source_map: dict[str, str] = {}
+
+    if not supabase:
+        # Retornar mapas ficticios para dry-run
+        return {"czfs": "demo", "capex-institucion": "demo", "pivem": "demo"}, {"google_reviews": "demo", "reddit": "demo", "news_web": "demo"}
 
     try:
         entities = supabase.table("entities").select("id, slug").execute()
@@ -149,6 +155,10 @@ def save_mentions(
     if not records_to_insert:
         return len(mentions), 0
 
+    if not supabase:
+        logger.info(f"Modo DRY RUN: Omitiendo guardado de {len(records_to_insert)} menciones")
+        return len(records_to_insert), 0
+
     try:
         # Upsert con ON CONFLICT DO NOTHING para content_hash
         result = supabase.table("mentions").upsert(
@@ -187,6 +197,8 @@ def log_scraper_run(
     started_at: str = None,
 ) -> str | None:
     """Registra una ejecución del scraper."""
+    if not supabase:
+        return None
     try:
         record = {
             "source_slug": source_slug,
