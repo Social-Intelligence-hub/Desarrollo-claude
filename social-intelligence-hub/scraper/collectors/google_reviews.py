@@ -17,25 +17,28 @@ logger = logging.getLogger(__name__)
 # Mapeo de ubicaciones físicas a configuración
 LOCATIONS = {
     "pivem": {
-        "name": "PIVEM - Parque Industrial Villa Europa",
+        "name": "Parque Industrial Víctor Espaillat Mera (PIVEM)",
         "entity_slug": "czfs",
-        "place_id": "ChIJ...",   # Reemplazar con Place ID real de Google Maps
-        "search_query": "Corporación Zona Franca Santiago PIVEM",
-        "url_hint": "https://maps.google.com/?cid=PLACE_ID_PIVEM",
+        "search_query": "Parque Industrial Víctor Espaillat Mera Santiago",
+        "url_hint": "https://www.google.com/maps/search/Parque+Industrial+Víctor+Espaillat+Mera+Santiago",
     },
     "plazona": {
         "name": "PlaZona",
         "entity_slug": "plazona",
-        "place_id": "ChIJ...",
         "search_query": "PlaZona Santiago República Dominicana",
-        "url_hint": "https://maps.google.com/?cid=PLACE_ID_PLAZONA",
+        "url_hint": "https://www.google.com/maps/search/PlaZona+Santiago",
     },
     "medica-czfs": {
         "name": "MÉDICA CZFS",
         "entity_slug": "medica-czfs",
-        "place_id": "ChIJ...",
-        "search_query": "MÉDICA CZFS Santiago",
-        "url_hint": "https://maps.google.com/?cid=PLACE_ID_MEDICA",
+        "search_query": "MÉDICA CZFS Santiago de los Caballeros",
+        "url_hint": "https://www.google.com/maps/search/MÉDICA+CZFS+Santiago",
+    },
+    "capex": {
+        "name": "CAPEX - Centro de Innovación y Capacitación Profesional",
+        "entity_slug": "capex-institucion",
+        "search_query": "CAPEX Centro de Innovación y Capacitación Profesional Santiago",
+        "url_hint": "https://www.google.com/maps/search/CAPEX+Santiago+Centro+Capacitacion",
     },
 }
 
@@ -112,20 +115,49 @@ class GoogleReviewsCollector:
         mentions = []
 
         try:
-            # Buscar y hacer clic en la sección de reseñas
-            review_tab = page.locator('[data-tab-index="1"]').first
-            if await review_tab.is_visible():
-                await review_tab.click()
-                await page.wait_for_timeout(2000)
+            # 1. Intentar encontrar y hacer clic en el botón de reseñas si no estamos ya ahí
+            # Diferentes selectores según la vista de Google Maps
+            review_selectors = [
+                'button[data-tab-index="1"]', 
+                'button:has-text("Reseñas")', 
+                'button:has-text("Reviews")',
+                '.hh76qc' 
+            ]
+            
+            clicked = False
+            for selector in review_selectors:
+                btn = page.locator(selector).first
+                if await btn.is_visible():
+                    await btn.click()
+                    clicked = True
+                    break
+            
+            if clicked:
+                await page.wait_for_timeout(3000)
 
-            # Scroll para cargar más reseñas
-            reviews_container = page.locator('.section-listbox')
-            for _ in range(3):
-                await page.keyboard.press('End')
-                await page.wait_for_timeout(1000)
+            # 2. Localizar el contenedor de scroll
+            # Suele ser el elemento con role="main" o un div con clase específica
+            scroll_container = page.locator('div[role="main"]').first
+            if not await scroll_container.is_visible():
+                scroll_container = page.locator('.m67yEc').first # Fallback clase común
 
-            # Extraer tarjetas de reseñas
+            # 3. Scroll para cargar reseñas
+            for _ in range(5):
+                if await scroll_container.is_visible():
+                    # Posicionar el mouse sobre el contenedor y hacer scroll
+                    await scroll_container.hover()
+                    await page.mouse.wheel(0, 5000)
+                else:
+                    await page.keyboard.press('End')
+                await page.wait_for_timeout(1500)
+
+            # 4. Extraer tarjetas de reseñas
+            # Selectores comunes para tarjetas: .jftiEf, .m67yEc, div[data-review-id]
             review_cards = await page.locator('.jftiEf').all()
+            if not review_cards:
+                review_cards = await page.locator('div[data-review-id]').all()
+
+            logger.info(f"Encontradas {len(review_cards)} tarjetas de reseña potenciales")
 
             for card in review_cards[:max_reviews]:
                 try:
@@ -144,29 +176,42 @@ class GoogleReviewsCollector:
     async def _parse_review_card(self, card, config: dict) -> Optional[dict]:
         """Parsea una tarjeta individual de reseña."""
         try:
+            from collectors.relevance_filter import es_relevante_dominicana
+
             # Autor
             author_el = card.locator('.d4r55').first
+            if not await author_el.is_visible():
+                author_el = card.locator('.XE87Be').first # Fallback
             author_name = await author_el.text_content() if await author_el.count() > 0 else "Anónimo"
 
-            # Estrellas (buscar aria-label con rating)
+            # Estrellas
             stars_el = card.locator('[aria-label*="estrellas"]').first
+            if not await stars_el.is_visible():
+                stars_el = card.locator('[aria-label*="stars"]').first
             stars_text = await stars_el.get_attribute('aria-label') if await stars_el.count() > 0 else ""
             star_rating = self._parse_star_rating(stars_text)
 
             # Texto de la reseña
             text_el = card.locator('.wiI7pd').first
-            # Expandir "Ver más" si existe
-            more_btn = card.locator('.w8nwRe').first
-            if await more_btn.count() > 0:
+            # Expandir "Ver más"
+            more_btn = card.locator('button:has-text("Ver más"), button:has-text("See more")').first
+            if await more_btn.is_visible():
                 await more_btn.click()
-                await card.page().wait_for_timeout(500)
+                await card.page().wait_for_timeout(300)
+            
             text = await text_el.text_content() if await text_el.count() > 0 else ""
 
-            if not text or len(text.strip()) < 5:
-                return None
+            # Filtro de relevancia para evitar ruido en Maps
+            # (Aunque buscamos la ubicación exacta, a veces Google mezcla resultados)
+            if not es_relevante_dominicana(text, config["entity_slug"]):
+                # Si el texto es corto pero la ubicación es exacta, lo permitimos si tiene estrellas
+                if len(text.strip()) < 10 and star_rating:
+                    pass 
+                else:
+                    return None
 
-            # URL (construir con datos disponibles)
-            source_url = config.get("url_hint", "https://maps.google.com")
+            if not text and not star_rating:
+                return None
 
             # Hash para deduplicación
             content_hash = hashlib.sha256(
@@ -176,14 +221,14 @@ class GoogleReviewsCollector:
             # Analizar sentimiento
             sentiment_result = {"label": "neutral", "scores": {}, "confidence": 0.5}
             if self.analyzer:
-                sentiment_result = self.analyzer.analyze(text)
+                sentiment_result = self.analyzer.analyze(text or "Reseña de estrellas")
 
             return {
                 "entity_slug": config["entity_slug"],
                 "source_slug": "google_reviews",
-                "text_original": text.strip(),
+                "text_original": text.strip() or f"Reseña de {star_rating} estrellas",
                 "author_name": author_name.strip(),
-                "source_url": source_url,
+                "source_url": config.get("url_hint", "https://maps.google.com"),
                 "star_rating": star_rating,
                 "sentiment_label": sentiment_result["label"],
                 "sentiment_score": sentiment_result["scores"],

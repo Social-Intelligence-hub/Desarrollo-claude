@@ -92,22 +92,31 @@ SEARCH_TERMS = {
 GOOGLE_NEWS_QUERIES = {
     "czfs": [
         "Corporación Zona Franca Santiago",
-        "CZFS Santiago",
-        "Zona Franca Santiago Dominicana",
-        "Zona Franca Santiago Mera",
+        "Zona Franca Santiago dominicana",
+        "PIVEM Santiago empleos",
+        "parque industrial victor espaillat mera",
+        "Zona Franca Santiago inversión",
     ],
     "capex-institucion": [
         "CAPEX Santiago capacitación",
-        "CAPEX centro educativo Santiago",
+        "CAPEX Santiago cursos",
+        "CAPEX Santiago diplomados",
+        "Infotep Santiago CZFS",
+        "educación técnica Santiago de los Caballeros",
     ],
     "pivem": [
-        "PIVEM parque industrial Santiago",
+        "PIVEM Santiago de los Caballeros",
+        "Parque Industrial Víctor Espaillat Mera noticias",
+        "empleos zona franca Santiago",
     ],
     "plazona": [
         "Plazona Santiago",
+        "PlaZona centro comercial Santiago",
     ],
     "medica-czfs": [
+        "MÉDICA CZFS Santiago",
         "centro médico zona franca Santiago",
+        "atención salud PIVEM Santiago",
     ],
 }
 

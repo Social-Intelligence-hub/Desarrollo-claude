@@ -260,7 +260,7 @@ def run_google_alerts(supabase, analyzer, entity_map, source_map) -> int:
     else:
         print("INFO: Fuente Google Alerts revisada con éxito, pero no hay contenido nuevo")
 
-    # RSS de noticias dominicanas
+    # 2. RSS de noticias dominicanas (Fuentes locales)
     for entity_slug in ["czfs", "capex-institucion", "pivem"]:
         try:
             news_mentions = collector.collect_from_news_rss(entity_slug)
@@ -273,6 +273,20 @@ def run_google_alerts(supabase, analyzer, entity_map, source_map) -> int:
                 print(f"INFO: Fuente RSS Noticias ({entity_slug}) revisada con éxito, pero no hay contenido nuevo")
         except Exception as e:
             logger.error(f"  Error en news RSS {entity_slug}: {e}")
+
+    # 3. Google News Active Search (Búsqueda proactiva)
+    for entity_slug in ["czfs", "capex-institucion", "pivem", "plazona", "medica-czfs"]:
+        try:
+            active_mentions = collector.collect_from_google_news(entity_slug)
+            if active_mentions:
+                _, new = save_mentions(supabase, active_mentions, entity_map, source_map)
+                total_new += new
+                log_scraper_run(supabase, "google_news", entity_slug,
+                               "success", len(active_mentions), new, started_at=started)
+            else:
+                print(f"INFO: Google News Activo ({entity_slug}) revisado, sin resultados nuevos")
+        except Exception as e:
+            logger.error(f"  Error en Google News Activo {entity_slug}: {e}")
 
     return total_new
 
@@ -305,6 +319,7 @@ def run_reddit(supabase, analyzer, entity_map, source_map) -> int:
 
 async def run_all_collectors(supabase):
     """Ejecuta todos los colectores en secuencia."""
+    started_run = datetime.now(timezone.utc).isoformat()
     logger.info("=" * 60)
     logger.info("SOCIAL INTELLIGENCE HUB — Iniciando recoleccion")
     logger.info(f"Timestamp: {datetime.now(timezone.utc).isoformat()}")
@@ -345,6 +360,9 @@ async def run_all_collectors(supabase):
     logger.info(f"COMPLETADO. Total nuevas menciones: {total_new}")
     logger.info("=" * 60)
     print(f"\nConexión con Supabase exitosa. Se intentaron guardar {total_new} filas")
+
+    # Registrar el resumen de la ejecución general
+    log_scraper_run(supabase, "orchestrator", "all", "success", total_new, total_new, started_at=started_run)
 
     return total_new
 
