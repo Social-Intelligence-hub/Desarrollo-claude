@@ -1,25 +1,19 @@
 import re
 
 BLACK_LIST_KEYWORDS = [
-    "chile",
-    "scl",
-    "valparaiso",
-    "santiago de chile",
-    "carabineros",
-    "pesos chilenos",
-    "audax",
-    "vasco",
-    "las américas",
-    "las americas",
-    "santo domingo este",
-    "santo domingo",
-    "santiago metro",
-    "región metropolitana",
-    "región metropolitana",
-    "las condes",
-    "providencia",
-    "san isidro",
-    "hainamosa",
+    # Geográficos (Fuera de Santiago RD)
+    "chile", "scl", "valparaiso", "santiago de chile", "carabineros", "pesos chilenos", "audax", "vasco",
+    "santiago metro", "región metropolitana", "las condes", "providencia", "san isidro",
+    "santo domingo este", "santo domingo", "distrito nacional", "hainamosa",
+    "argentina", "buenos aires", "méxico", "mexico", "colombia", "bogotá", "bogota", "venezuela",
+    # Deportes y otros ruidos
+    "messi", "maradona", "fútbol", "futbol", "gol", "fifa", "copa américa", "copa america",
+    "mets", "yankees", "red sox", "mlb", "grandes ligas", "beisbol", "baseball",
+    # Política Internacional y Conflictos
+    "irán", "iran", "hormuz", "ormuz", "estrecho", "rusia", "ucrania", "putin", "zelensky",
+    "israel", "gaza", "palestina",
+    # Términos Genéricos de Salud (Ruido para MÉDICA)
+    "junta médica", "seguro médico", "atención médica", "facultad de medicina", "médica forense",
 ]
 
 CHILE_STRONG_SIGNALS = [
@@ -52,15 +46,28 @@ CZFS_TERMS = [
     "corporación zona franca",
     "corporacion zona franca",
     "zona franca santiago",
-    "zona franca",
+    "parque industrial victor espaillat",
+    "parque industrial víctor espaillat",
+    "pivem",
     "mera",
     "vvm",
     "capex",
-    "pivem",
     "plazona",
     "médica czfs",
     "medica czfs",
     "villa europa",
+]
+
+# Empresas clave en el PIVEM
+PIVEM_COMPANIES = [
+    "grupo m", "codevi", "bojs tanning", "swisher", "swedish match", 
+    "general cigar", "hanesbrands", "hanes", "timberland", "vf corporation",
+    "insight", "grand island", "cooperativa san miguel",
+]
+
+CAPEX_CONTEXT_TERMS = [
+    "capacitación", "capacitacion", "curso", "taller", "formacion", "formación",
+    "diplomado", "educacion", "educación", "infotep", "enseñanza", "aprendizaje",
 ]
 
 CAPEX_TERMS = [
@@ -147,42 +154,46 @@ def es_relevante_dominicana(texto: str, entity_slug: str | None = None) -> bool:
         return False
 
     text = normalize_text(texto)
+    
+    # 1. Filtro de Lista Negra (Inmediato)
     if has_blacklist_signal(text):
         return False
     if has_chile_domain(text):
         return False
 
-    if entity_slug:
-        if not has_entity_term(text, entity_slug):
-            return False
-    else:
-        if not any(term in text for term in GENERIC_ENTITY_TERMS):
-            return False
-
-    if has_dominican_domain(text):
-        return True
-
-    if "santiago de los caballeros" in text:
-        return True
-
-    if has_dominican_signal(text) and any(term in text for term in GENERIC_ENTITY_TERMS):
-        return True
-
-    if entity_slug == "czfs":
-        return has_santiago(text) and any(term in text for term in [
-            "czfs", "corporación zona franca", "corporacion zona franca", "mera", "vvm", "capex"
-        ])
-
+    # 2. Desambiguación Geográfica Positiva
+    is_santiago_rd = has_santiago(text) and (has_dominican_signal(text) or has_dominican_domain(text))
+    
+    # 3. Lógica por Entidad
     if entity_slug == "capex-institucion":
-        return has_santiago(text) and "capex" in text
-
-    if entity_slug == "pivem":
-        return has_santiago(text) and any(term in text for term in ["pivem", "parque industrial"])
-
-    if entity_slug == "plazona":
-        return has_santiago(text) and "plazona" in text
+        # Requiere "capex" Y contexto educativo O Santiago RD
+        has_capex = "capex" in text
+        has_edu_context = any(term in text for term in CAPEX_CONTEXT_TERMS)
+        return has_capex and (has_edu_context or is_santiago_rd)
 
     if entity_slug == "medica-czfs":
-        return has_santiago(text) and any(term in text for term in ["médica czfs", "medica czfs"])
+        # Requiere "médica" Y contexto institucional de Santiago
+        has_medica = "médica" in text or "medica" in text
+        has_medica_context = any(term in text for term in ["czfs", "pivem", "zona franca", "santiago"])
+        return has_medica and has_medica_context
+
+    if entity_slug == "pivem":
+        # PIVEM o empresas del parque
+        has_pivem = "pivem" in text or "parque industrial" in text
+        has_company = any(term in text for term in PIVEM_COMPANIES)
+        return (has_pivem or has_company) and (is_santiago_rd or "santiago" in text)
+
+    if entity_slug == "czfs":
+        has_czfs = any(term in text for term in CZFS_TERMS)
+        return has_czfs and (is_santiago_rd or "santiago" in text)
+
+    # 4. Filtro Genérico (Si no se especifica entidad)
+    all_positive_terms = GENERIC_ENTITY_TERMS + PIVEM_COMPANIES
+    if any(term in text for term in all_positive_terms):
+        if is_santiago_rd:
+            return True
+        # Si menciona una empresa específica y Santiago, lo damos por bueno
+        if any(term in text for term in PIVEM_COMPANIES) and "santiago" in text:
+            return True
 
     return False
