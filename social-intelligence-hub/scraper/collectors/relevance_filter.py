@@ -1,4 +1,7 @@
+import logging
 import re
+
+logger = logging.getLogger(__name__)
 
 BLACK_LIST_KEYWORDS = [
     # SUPER_BLACKLIST (Ruido Internacional Crítico)
@@ -58,6 +61,7 @@ CZFS_TERMS = [
     "medica czfs",
     "villa europa",
 ]
+
 
 # Empresas clave en el PIVEM
 PIVEM_COMPANIES = [
@@ -151,69 +155,165 @@ def has_entity_term(text: str, entity_slug: str) -> bool:
 
 
 def es_relevante_dominicana(texto: str, entity_slug: str | None = None) -> bool:
+    """
+    Filtro estricto de relevancia para RD/CZFS/CAPEX.
+    Retorna True solo si:
+    - NO tiene palabras clave de ruido (Chile, sports, etc.)
+    - Si menciona Santiago, DEBE confirmar contexto RD (Dominicana/RD/Caballeros)
+    - Si es CAPEX, DEBE tener contexto educativo
+    - Si es MÉDICA, DEBE confirmar ser de CZFS Santiago
+    - Si es PIVEM, DEBE mencionar el parque en RD
+    """
     if not texto:
         return False
 
     text = normalize_text(texto)
     
-    # 1. Filtro de Lista Negra (Inmediato)
+    # 1. Filtro CRÍTICO: Lista Negra (Inmediato)
     if has_blacklist_signal(text):
-        print("\n" + "!"*60)
-        print(f"!!! DESCARTADO POR RUIDO (Blacklist): {text[:100]}...")
-        print("!"*60 + "\n")
+        logger.debug(f"[DESCARTADO] Blacklist: {texto[:80]}...")
         return False
     if has_chile_domain(text):
-        print("\n" + "!"*60)
-        print(f"!!! DESCARTADO POR RUIDO (Dominio Chile): {text[:100]}...")
-        print("!"*60 + "\n")
+        logger.debug(f"[DESCARTADO] Dominio Chile (.cl): {texto[:80]}...")
         return False
 
-    # 2. Desambiguación Geográfica Obligatoria para Santiago
-    # Si menciona "Santiago", DEBE mencionar Dominicana, RD, Cibao o Caballeros.
-    if "santiago" in text:
-        if not has_dominican_signal(text) and not has_dominican_domain(text):
-            print("\n" + "!"*60)
-            print(f"!!! DESCARTADO POR RUIDO (Santiago sin contexto RD): {text[:100]}...")
-            print("!"*60 + "\n")
+    # 2. Desambiguación Geográfica para Santiago GENÉRICO (sin entidad específica)
+    # Si no estamos buscando una entidad específica y menciona Santiago, DEBE confirmar RD
+    if entity_slug is None and "santiago" in text:
+        has_rd_signal = has_dominican_signal(text) or has_dominican_domain(text)
+        if not has_rd_signal:
+            logger.debug(f"[DESCARTADO] Santiago sin contexto RD: {texto[:80]}...")
             return False
 
     is_santiago_rd = has_dominican_signal(text) or has_dominican_domain(text)
     
-    # 3. Lógica por Entidad
+    # 3. Lógica ESTRICTA por Entidad
+    
     if entity_slug == "capex-institucion":
-        # DEBE contener al menos una palabra de educación para ser guardada
+        # CAPEX SOLO se acepta si es educativo
         has_capex = "capex" in text
-        has_edu_context = any(term in text for term in ["curso", "taller", "diplomado", "capacitacion", "estudio", "infotep"])
-        if not has_edu_context:
-            print("\n" + "!"*60)
-            print(f"!!! DESCARTADO POR RUIDO (CAPEX sin contexto educativo): {text[:100]}...")
-            print("!"*60 + "\n")
+        if not has_capex:
+            logger.debug(f"[DESCARTADO] CAPEX sin mención directa: {texto[:80]}...")
             return False
-        return has_capex
+        
+        # CAPEX DEBE estar en contexto educativo
+        edu_keywords = ["curso", "taller", "diplomado", "capacitacion", "capacitación", 
+                       "formacion", "formación", "certificacion", "certificación",
+                       "programa", "infotep", "estudiante", "alumno", "egresado", 
+                       "entrenamiento", "adiestramiento"]
+        has_edu_context = any(kw in text for kw in edu_keywords)
+        if not has_edu_context:
+            logger.debug(f"[DESCARTADO] CAPEX sin contexto educativo: {texto[:80]}...")
+            return False
+        
+        # Si menciona Santiago Y contexto chileno, rechazar
+        if "santiago" in text and has_chile_domain(text):
+            logger.debug(f"[DESCARTADO] CAPEX en contexto Chile: {texto[:80]}...")
+            return False
+        
+        logger.debug(f"[ACEPTADO] CAPEX educativo: {texto[:80]}...")
+        return True
 
     if entity_slug == "medica-czfs":
-        # Requiere "médica" Y contexto institucional de Santiago RD
-        has_medica = "médica" in text or "medica" in text
-        has_medica_context = any(term in text for term in ["czfs", "pivem", "zona franca", "santiago", "rd", "dominicana"])
-        return has_medica and has_medica_context
+        # MÉDICA CZFS DEBE confirmar ser médica
+        has_medica = ("médica" in text or "medica" in text or 
+                     "centro médico" in text or "centro medico" in text or
+                     "clínica" in text or "clinica" in text)
+        if not has_medica:
+            logger.debug(f"[DESCARTADO] No es MÉDICA: {texto[:80]}...")
+            return False
+        
+        # MÉDICA en CZFS/PIVEM/zona franca es suficiente (contexto claro)
+        czfs_context_terms = ["czfs", "zona franca", "pivem", "parque industrial", 
+                             "el parque", "santiaguero", "santiago de los caballeros"]
+        has_czfs_context = any(term in text for term in czfs_context_terms)
+        
+        # O MÉDICA con Santiago + contexto RD
+        explicit_rd = is_santiago_rd or ("santiago" in text and has_dominican_signal(text))
+        
+        if not (has_czfs_context or explicit_rd):
+            logger.debug(f"[DESCARTADO] MÉDICA sin contexto CZFS/RD: {texto[:80]}...")
+            return False
+        
+        # Rechazar si está explícitamente en Chile
+        if has_chile_domain(text):
+            logger.debug(f"[DESCARTADO] MÉDICA en contexto Chile: {texto[:80]}...")
+            return False
+        
+        logger.debug(f"[ACEPTADO] MÉDICA CZFS: {texto[:80]}...")
+        return True
 
     if entity_slug == "pivem":
-        # PIVEM o empresas del parque en contexto RD
-        has_pivem = "pivem" in text or "parque industrial" in text
+        # PIVEM o empresas del parque
+        has_pivem_term = "pivem" in text or "villa europa" in text or "parque industrial" in text or "el parque" in text
         has_company = any(term in text for term in PIVEM_COMPANIES)
-        return (has_pivem or has_company) and (is_santiago_rd or "santiago" in text)
+        has_zona_franca = "zona franca" in text  # Zona franca es contexto implícitamente RD
+        
+        if not (has_pivem_term or has_company or (has_zona_franca and "pivem" in text)):
+            logger.debug(f"[DESCARTADO] No PIVEM ni empresas: {texto[:80]}...")
+            return False
+        
+        # Rechazar si está explícitamente en Chile
+        if has_chile_domain(text):
+            logger.debug(f"[DESCARTADO] PIVEM en contexto Chile: {texto[:80]}...")
+            return False
+        
+        # Si menciona Santiago, DEBE ser Santiago RD (no Chile)
+        if "santiago" in text and not is_santiago_rd and not has_zona_franca:
+            logger.debug(f"[DESCARTADO] PIVEM Santiago sin contexto RD: {texto[:80]}...")
+            return False
+        
+        logger.debug(f"[ACEPTADO] PIVEM: {texto[:80]}...")
+        return True
 
     if entity_slug == "czfs":
+        # CZFS o zona franca
         has_czfs = any(term in text for term in CZFS_TERMS)
-        return has_czfs and (is_santiago_rd or "santiago" in text)
+        if not has_czfs:
+            logger.debug(f"[DESCARTADO] No CZFS/zona franca: {texto[:80]}...")
+            return False
+        
+        # Rechazar si está explícitamente en Chile
+        if has_chile_domain(text):
+            logger.debug(f"[DESCARTADO] CZFS en contexto Chile: {texto[:80]}...")
+            return False
+        
+        # Si menciona "Zona franca Santiago" sin contrasentido (Chile), es RD por defecto
+        # Si menciona Santiago, DEBE ser Santiago RD (no Chile) a menos que ya lo es implícitamente
+        if "santiago" in text and not is_santiago_rd:
+            # Solo rechazar si hay una contrasentido explícito (no lo hay si es "zona franca santiago")
+            # porque zona franca santiago es por defecto CZFS RD
+            if "zona franca santiago" not in text:
+                logger.debug(f"[DESCARTADO] CZFS Santiago sin contexto RD: {texto[:80]}...")
+                return False
+        
+        logger.debug(f"[ACEPTADO] CZFS: {texto[:80]}...")
+        return True
+
+    if entity_slug == "plazona":
+        # PLAZONA DEBE mencionar plazona
+        has_plazona = "plazona" in text
+        if not has_plazona:
+            logger.debug(f"[DESCARTADO] No Plazona: {texto[:80]}...")
+            return False
+        
+        # Rechazar si está en Chile
+        if has_chile_domain(text):
+            logger.debug(f"[DESCARTADO] Plazona en contexto Chile: {texto[:80]}...")
+            return False
+        
+        logger.debug(f"[ACEPTADO] Plazona: {texto[:80]}...")
+        return True
 
     # 4. Filtro Genérico (Si no se especifica entidad)
     all_positive_terms = GENERIC_ENTITY_TERMS + PIVEM_COMPANIES
     if any(term in text for term in all_positive_terms):
-        if is_santiago_rd:
+        if is_santiago_rd or has_dominican_domain(text):
+            logger.debug(f"[ACEPTADO] Genérico RD: {texto[:80]}...")
             return True
-        # Si menciona una empresa específica y Santiago RD
-        if any(term in text for term in PIVEM_COMPANIES) and "santiago" in text and is_santiago_rd:
-            return True
+        logger.debug(f"[DESCARTADO] Genérico sin RD: {texto[:80]}...")
+        return False
 
+    logger.debug(f"[DESCARTADO] Sin coincidencia de términos: {texto[:80]}...")
     return False
+
