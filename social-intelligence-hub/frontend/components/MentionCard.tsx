@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, Star, Copy, Check } from "lucide-react";
+import { ExternalLink, Star, Copy, Check, ThumbsUp, ThumbsDown, Minus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import {
   cn,
@@ -21,13 +21,46 @@ interface MentionCardProps {
 
 export function MentionCard({ mention, className, compact = false }: MentionCardProps) {
   const [copied, setCopied] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [currentSentiment, setCurrentSentiment] = useState(mention.sentiment_label);
+  const [showRejectMenu, setShowRejectMenu] = useState(false);
 
-  const sentiment  = getSentimentConfig(mention.sentiment_label);
   const sourceSlug = mention.sources?.slug ?? "";
   const sourceName = getSourceLabel(sourceSlug);
   const sourceColor = getSourceColor(sourceSlug);
   const initials   = getInitials(mention.author_name);
   const langLabel  = getLanguageLabel(mention.language);
+
+  // Limpiador de texto (HTML Entities)
+  const cleanText = (text: string) => {
+    if (!text) return "";
+    return text
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/\s\s+/g, ' '); // Remover espacios dobles
+  };
+
+  const handleUpdateSentiment = async (newLabel: any) => {
+    if (newLabel === currentSentiment) return;
+    setIsUpdating(true);
+    try {
+      const { updateMentionSentiment } = await import("@/lib/supabase");
+      const ok = await updateMentionSentiment(mention.id, newLabel);
+      if (ok) {
+        setCurrentSentiment(newLabel);
+      }
+    } catch (err) {
+      console.error("Error updating sentiment:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const sentimentConfig = getSentimentConfig(currentSentiment);
 
   // Texto truncado del dominio para mostrar en el botón "Ver fuente"
   const sourceUrlLabel = (() => {
@@ -106,10 +139,11 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
               {langLabel}
             </span>
 
-            {/* Demo Badge */}
-            {mention.is_demo && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-bold border border-amber-200 uppercase tracking-tighter shadow-sm">
-                DEMO
+            {/* Revisión Humana Badge */}
+            {(mention.confidence_score ?? 1) < 0.75 && (
+              <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-600 font-bold border border-amber-200 uppercase tracking-tight flex items-center gap-1 shadow-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                Requiere Revisión
               </span>
             )}
           </div>
@@ -120,17 +154,94 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
           </p>
         </div>
 
-        {/* Sentimiento */}
-        <span
-          className="flex-shrink-0 text-xs font-semibold px-2.5 py-1 rounded border"
-          style={{
-            backgroundColor: sentiment.bgColor,
-            color: sentiment.color,
-            borderColor: sentiment.borderColor,
-          }}
-        >
-          {sentiment.label}
-        </span>
+        {/* Sentimiento (Manual Selector) */}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 bg-slate-50 border rounded-lg p-0.5">
+              {(['positive', 'neutral', 'negative'] as const).map((label) => (
+                <button
+                  key={label}
+                  onClick={() => handleUpdateSentiment(label)}
+                  disabled={isUpdating}
+                  title={`Cambiar a ${label}`}
+                  className={cn(
+                    "w-6 h-6 rounded-md flex items-center justify-center transition-all",
+                    currentSentiment === label 
+                      ? "bg-white shadow-sm border scale-110" 
+                      : "text-slate-400 hover:text-slate-600 grayscale opacity-60 hover:opacity-100"
+                  )}
+                >
+                  {label === 'positive' && <ThumbsUp className="h-3 w-3 text-emerald-600" />}
+                  {label === 'neutral' && <Minus className="h-3 w-3 text-slate-600" />}
+                  {label === 'negative' && <ThumbsDown className="h-3 w-3 text-red-600" />}
+                </button>
+              ))}
+            </div>
+            
+            {/* Botón de rechazo / irrelevante */}
+            <div className="relative">
+              {showRejectMenu && (
+                <div className="absolute right-0 top-8 w-48 bg-white border shadow-lg rounded-md z-10 p-1 flex flex-col gap-1 text-sm animate-in fade-in zoom-in-95">
+                  <div className="px-2 py-1 text-xs font-semibold text-slate-500 border-b mb-1">
+                    Razón de eliminación:
+                  </div>
+                  {[
+                    "Spam o Promoción",
+                    "No relacionado a CZFS",
+                    "Idioma o región incorrecta",
+                    "Contenido ofensivo",
+                    "Otro"
+                  ].map(reason => (
+                    <button
+                      key={reason}
+                      onClick={async () => {
+                        setShowRejectMenu(false);
+                        setIsUpdating(true);
+                        try {
+                          const res = await fetch("/api/mentions/reject", {
+                            method: "DELETE",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ id: mention.id, reason })
+                          });
+                          if (res.ok) {
+                            window.location.reload();
+                          } else {
+                            alert("Error eliminando mención");
+                          }
+                        } finally {
+                          setIsUpdating(false);
+                        }
+                      }}
+                      className="text-left px-2 py-1.5 hover:bg-slate-100 rounded text-slate-700 hover:text-red-600 transition-colors"
+                    >
+                      {reason}
+                    </button>
+                  ))}
+                  <button 
+                    onClick={() => setShowRejectMenu(false)}
+                    className="text-center px-2 py-1.5 mt-1 text-xs text-slate-400 hover:text-slate-600 border-t"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              )}
+              <button
+                onClick={() => setShowRejectMenu(!showRejectMenu)}
+                disabled={isUpdating}
+                title="Marcar como irrelevante (Aprender de este error)"
+                className="w-6 h-6 rounded-md flex items-center justify-center transition-all text-slate-400 hover:text-red-500 hover:bg-red-50"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+          <span 
+            className="text-[10px] font-bold uppercase tracking-wider"
+            style={{ color: sentimentConfig.color }}
+          >
+            {sentimentConfig.label}
+          </span>
+        </div>
       </div>
 
       {/* ── Estrellas (Google Reviews) ── */}
@@ -160,7 +271,7 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
             compact && "line-clamp-5 text-sm"
           )}
         >
-          {mention.text_original}
+          {cleanText(mention.text_original)}
         </p>
       </div>
 
@@ -176,7 +287,7 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                 className="h-full rounded-full"
                 style={{
                   width: `${Math.round(mention.confidence_score * 100)}%`,
-                  backgroundColor: sentiment.color,
+                  backgroundColor: sentimentConfig.color,
                 }}
               />
             </div>
