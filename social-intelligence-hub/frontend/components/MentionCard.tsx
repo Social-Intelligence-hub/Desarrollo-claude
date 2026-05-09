@@ -200,7 +200,7 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                         setShowRejectMenu(false);
                         setIsUpdating(true);
                         try {
-                          const res = await fetch("/api/mentions/feedback", {
+                          const res = await fetch("/api/mentions/moderate", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ id: mention.id, reason })
