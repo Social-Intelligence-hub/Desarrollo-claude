@@ -13,16 +13,18 @@ from datetime import datetime, timezone
 import requests
 from dotenv import load_dotenv
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Configuración de logs
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    handlers=[logging.FileHandler("scraper/scraper.log"), logging.StreamHandler()],
+    handlers=[logging.FileHandler(os.path.join(BASE_DIR, "scraper.log")), logging.StreamHandler()],
 )
 logger = logging.getLogger("main")
 
 # Cargar variables de entorno
-load_dotenv("scraper/.env")
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 
 def get_supabase_client():
