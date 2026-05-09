@@ -4,19 +4,17 @@ import re
 logger = logging.getLogger(__name__)
 
 BLACK_LIST_KEYWORDS = [
-    # SUPER_BLACKLIST (Ruido Internacional Crítico)
-    "mets", "mlb", "maradona", "messi", "irán", "iran", "hormuz", "ormuz", "rusia", "ucrania", "putin", "chile", "scl", "carabineros", "arriendos",
-    # Geográficos adicionales
-    "valparaiso", "santiago de chile", "pesos chilenos", "audax", "vasco",
-    "santiago metro", "región metropolitana", "las condes", "providencia", "san isidro",
-    "santo domingo este", "santo domingo", "distrito nacional", "hainamosa",
+    # SUPER_BLACKLIST (Ruido Internacional y Casos Irrelevantes)
+    "mets", "mlb", "maradona", "messi", "shakira", "marco rubio", "irán", "iran", "hormuz", "ormuz", 
+    "rusia", "ucrania", "putin", "zelensky", "israel", "gaza", "palestina",
+    "redondo llenas", "llenas aybar", "najayo", "mario josé redondo", "mario jose redondo",
+    "chile", "scl", "carabineros", "arriendos", "pesos chilenos", "audax", "vasco",
+    "santiago metro", "región metropolitana", "las condes", "providencia",
+    "santo domingo", "distrito nacional", "hainamosa", "haina", "ozama",
     "argentina", "buenos aires", "méxico", "mexico", "colombia", "bogotá", "bogota", "venezuela",
-    # Deportes y otros ruidos
+    # Otros ruidos
     "fútbol", "futbol", "gol", "fifa", "copa américa", "copa america",
     "yankees", "red sox", "grandes ligas", "beisbol", "baseball",
-    # Política Internacional
-    "zelensky", "israel", "gaza", "palestina",
-    # Términos Genéricos de Salud (Ruido para MÉDICA)
     "junta médica", "seguro médico", "atención médica", "facultad de medicina", "médica forense",
 ]
 
@@ -171,40 +169,32 @@ def es_relevante_dominicana(texto: str, entity_slug: str | None = None) -> bool:
     
     # 1. Filtro CRÍTICO: Lista Negra (Inmediato)
     if has_blacklist_signal(text):
-        logger.debug(f"[DESCARTADO] Blacklist: {texto[:80]}...")
+        print(f"!!! DESCARTADO POR RUIDO (Blacklist): {text[:80]}...")
         return False
     if has_chile_domain(text):
-        logger.debug(f"[DESCARTADO] Dominio Chile (.cl): {texto[:80]}...")
+        print(f"!!! DESCARTADO POR RUIDO (Dominio Chile): {text[:80]}...")
         return False
 
-    # 2. Desambiguación Geográfica para Santiago GENÉRICO (sin entidad específica)
-    # Si no estamos buscando una entidad específica y menciona Santiago, DEBE confirmar RD
-    if entity_slug is None and "santiago" in text:
-        has_rd_signal = has_dominican_signal(text) or has_dominican_domain(text)
-        if not has_rd_signal:
-            logger.debug(f"[DESCARTADO] Santiago sin contexto RD: {texto[:80]}...")
-            return False
-
-    is_santiago_rd = has_dominican_signal(text) or has_dominican_domain(text)
+    # 2. Desambiguación Geográfica para Santiago RD
+    # Para ser Santiago RD, debe tener Santiago Y alguna señal dominicana.
+    is_santiago_rd = "santiago" in text and (has_dominican_signal(text) or has_dominican_domain(text))
     
     # 3. Lógica ESTRICTA por Entidad
     
     if entity_slug == "capex-institucion":
-        # CAPEX SOLO se acepta si es educativo
-        has_capex = "capex" in text
-        if not has_capex:
-            logger.debug(f"[DESCARTADO] CAPEX sin mención directa: {texto[:80]}...")
+        # REQUERIMIENTO: Mencionar "CAPEX" Y contexto educativo
+        if "capex" not in text:
             return False
         
-        # CAPEX DEBE estar en contexto educativo
         edu_keywords = ["curso", "taller", "diplomado", "capacitacion", "capacitación", 
                        "formacion", "formación", "certificacion", "certificación",
-                       "programa", "infotep", "estudiante", "alumno", "egresado", 
-                       "entrenamiento", "adiestramiento"]
+                       "infotep", "enseñanza", "aprendizaje"]
         has_edu_context = any(kw in text for kw in edu_keywords)
         if not has_edu_context:
-            logger.debug(f"[DESCARTADO] CAPEX sin contexto educativo: {texto[:80]}...")
+            print(f"!!! DESCARTADO POR RUIDO (CAPEX sin contexto educativo): {text[:80]}...")
             return False
+        
+        return True
         
         # Si menciona Santiago Y contexto chileno, rechazar
         if "santiago" in text and has_chile_domain(text):

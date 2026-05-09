@@ -265,6 +265,7 @@ export default function DashboardPage() {
     state.page,
   ]);
 
+  // ── Reload charts/stats cuando cambian entity, fecha o búsqueda ────────────────
   useEffect(() => {
     const { from, to } = resolvedDates;
     const { skip, effectiveEntity, effectiveQuery } = resolveEffectiveFilters();
@@ -283,7 +284,10 @@ export default function DashboardPage() {
 
     if (capexType === "institution") {
       newEntity = "capex-institucion";
-      newQuery = ""; // Filtrar por entidad, no por texto
+      // No vaciamos el query si tiene más que solo "capex"
+      if (query.toLowerCase().trim() === "capex") {
+        newQuery = ""; 
+      }
     }
 
     updateState({
@@ -673,13 +677,31 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="flex items-center gap-2 flex-wrap">
-              <Filter className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-              <FilterChips
-                options={sentimentFilterOptions}
-                selected={state.selectedSentiment}
-                onChange={handleSentimentChange}
-              />
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fuente:</span>
+                <select
+                  value={state.selectedSource}
+                  onChange={(e) => updateState({ selectedSource: e.target.value, page: 0 })}
+                  className="text-xs font-bold border-slate-200 border rounded-lg px-2 py-1 bg-white text-czfs-navy
+                             focus:outline-none focus:ring-2 focus:ring-czfs-blue/20 transition-all cursor-pointer shadow-sm"
+                >
+                  <option value="all">Todas las fuentes</option>
+                  <option value="google_news">Google News</option>
+                  <option value="google_reviews">Google Reviews</option>
+                  <option value="active_search">Búsqueda Activa (Foros)</option>
+                  <option value="reddit">Reddit</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Filter className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                <FilterChips
+                  options={sentimentFilterOptions}
+                  selected={state.selectedSentiment}
+                  onChange={handleSentimentChange}
+                />
+              </div>
             </div>
           </div>
 

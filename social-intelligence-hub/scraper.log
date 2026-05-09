@@ -1,0 +1,1476 @@
+2026-05-06 10:53:23,937 [ERROR] main: supabase-py no instalado. pip install supabase
+2026-05-06 10:53:23,938 [ERROR] main: No se pudo crear el cliente Supabase. Verificar .env
+2026-05-06 10:54:57,759 [INFO] main: ============================================================
+2026-05-06 10:54:57,759 [INFO] main: SOCIAL INTELLIGENCE HUB — Iniciando recoleccion
+2026-05-06 10:54:57,760 [INFO] main: Timestamp: 2026-05-06T14:54:57.760123+00:00
+2026-05-06 10:54:57,760 [INFO] main: ============================================================
+2026-05-06 10:54:57,760 [INFO] main: Modo DRY RUN: Omitiendo verificacion de conexion
+2026-05-06 10:54:57,944 [INFO] processors.azure_sentiment: Azure AI Language client inicializado correctamente.
+2026-05-06 10:54:57,945 [INFO] main: 
+[1/3] Google Reviews...
+2026-05-06 10:54:57,945 [INFO] main:   Google Reviews: pivem
+2026-05-06 10:54:57,945 [INFO] collectors.google_reviews: Recolectando reviews de: Parque Industrial Víctor Espaillat Mera (PIVEM)
+2026-05-06 10:55:21,261 [ERROR] collectors.google_reviews: Error recolectando reviews: BrowserType.launch: Executable doesn't exist at C:\Users\maria\AppData\Local\ms-playwright\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-06 10:55:21,427 [INFO] main:   Google Reviews: plazona
+2026-05-06 10:55:21,427 [INFO] collectors.google_reviews: Recolectando reviews de: PlaZona
+2026-05-06 10:55:23,308 [ERROR] collectors.google_reviews: Error recolectando reviews: BrowserType.launch: Executable doesn't exist at C:\Users\maria\AppData\Local\ms-playwright\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-06 10:55:23,338 [INFO] main:   Google Reviews: medica-czfs
+2026-05-06 10:55:23,342 [INFO] collectors.google_reviews: Recolectando reviews de: MÉDICA CZFS
+2026-05-06 10:55:24,918 [ERROR] collectors.google_reviews: Error recolectando reviews: BrowserType.launch: Executable doesn't exist at C:\Users\maria\AppData\Local\ms-playwright\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-06 10:55:24,951 [INFO] main:   Google Reviews: capex
+2026-05-06 10:55:24,960 [INFO] collectors.google_reviews: Recolectando reviews de: CAPEX - Centro de Innovación y Capacitación Profesional
+2026-05-06 10:55:26,177 [ERROR] collectors.google_reviews: Error recolectando reviews: BrowserType.launch: Executable doesn't exist at C:\Users\maria\AppData\Local\ms-playwright\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-05-06 10:55:26,188 [INFO] main:   -> 0 nuevas menciones
+2026-05-06 10:55:26,188 [INFO] main: 
+[2/3] Google Alerts y Noticias...
+2026-05-06 10:55:26,189 [INFO] collectors.google_alerts: Feed no configurado para czfs, retornando vacío (prohibido inventar datos)...
+2026-05-06 10:55:26,189 [INFO] collectors.google_alerts: Feed no configurado para czfs, retornando vacío (prohibido inventar datos)...
+2026-05-06 10:55:26,189 [INFO] collectors.google_alerts: Feed no configurado para capex-institucion, retornando vacío (prohibido inventar datos)...
+2026-05-06 10:55:26,189 [INFO] collectors.google_alerts: Feed no configurado para pivem, retornando vacío (prohibido inventar datos)...
+2026-05-06 10:55:27,100 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '559'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': '9e3f5f36-495b-11f1-b4c4-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:27,680 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '0fdf11a4-545f-41ac-b5f3-b38ce37d73a3'
+    'Date': 'Wed, 06 May 2026 14:55:27 GMT'
+2026-05-06 10:55:27,681 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:27,688 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '560'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': '9e991365-495b-11f1-b3ac-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:27,796 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '8052db0a-dd92-480a-84df-494e0fb8a0d8'
+    'Date': 'Wed, 06 May 2026 14:55:27 GMT'
+2026-05-06 10:55:27,796 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:31,104 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '5378'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'a0a218a4-495b-11f1-991b-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:31,182 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'd5ca6f29-cc2a-463f-8189-646073a77e14'
+    'Date': 'Wed, 06 May 2026 14:55:31 GMT'
+2026-05-06 10:55:31,182 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:34,686 [INFO] main: Modo DRY RUN: Omitiendo guardado de 4 menciones
+2026-05-06 10:55:49,733 [INFO] collectors.google_alerts: Google News RSS: Corporación Zona Franca Santiago
+2026-05-06 10:55:50,997 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '272'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ac7dba56-495b-11f1-8af3-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:51,101 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '65ed5eb8-4a14-42b4-b098-91ad10750934'
+    'Date': 'Wed, 06 May 2026 14:55:50 GMT'
+2026-05-06 10:55:51,102 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:51,106 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '293'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ac8e583e-495b-11f1-9e4a-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:51,225 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'f2755784-6abb-4420-ab33-7f4776f2a7a9'
+    'Date': 'Wed, 06 May 2026 14:55:50 GMT'
+2026-05-06 10:55:51,226 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:51,229 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '399'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'aca12f9f-495b-11f1-92ca-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:51,351 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'c3cea2f9-b960-469a-baba-f403ccd8d466'
+    'Date': 'Wed, 06 May 2026 14:55:51 GMT'
+2026-05-06 10:55:51,352 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:51,355 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '363'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'acb45c89-495b-11f1-89ae-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:51,519 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'b88eac41-6d5c-4894-bab7-bb4c844f77b6'
+    'Date': 'Wed, 06 May 2026 14:55:51 GMT'
+2026-05-06 10:55:51,520 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:51,523 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '333'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'acce0174-495b-11f1-8842-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:51,714 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '545e1f40-695c-4aaf-a4c5-4dd724e3ddbe'
+    'Date': 'Wed, 06 May 2026 14:55:51 GMT'
+2026-05-06 10:55:51,715 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:51,717 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '286'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'aceba3c0-495b-11f1-a901-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:51,926 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '5ebc9e96-5c42-4f43-b393-c8fa7bddcc54'
+    'Date': 'Wed, 06 May 2026 14:55:51 GMT'
+2026-05-06 10:55:51,926 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:51,928 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '276'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ad0bcafa-495b-11f1-bf39-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:52,155 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'deb3f883-7383-4473-a87f-379fbb9f3d8c'
+    'Date': 'Wed, 06 May 2026 14:55:51 GMT'
+2026-05-06 10:55:52,155 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:52,159 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '288'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ad2f0468-495b-11f1-a334-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:52,404 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '61e642be-17e9-40dd-af9b-2dfae796dbc0'
+    'Date': 'Wed, 06 May 2026 14:55:52 GMT'
+2026-05-06 10:55:52,405 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:52,408 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '267'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ad551fb8-495b-11f1-add5-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:52,661 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'a3777534-de51-4666-a78a-6d1ae3bd54bd'
+    'Date': 'Wed, 06 May 2026 14:55:52 GMT'
+2026-05-06 10:55:52,662 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:52,665 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '373'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ad7c4137-495b-11f1-8b54-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:52,926 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '9ee6f1e5-c15a-41dc-984e-62d194280380'
+    'Date': 'Wed, 06 May 2026 14:55:52 GMT'
+2026-05-06 10:55:52,926 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:52,932 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '335'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ada4f705-495b-11f1-a368-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:53,186 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '96ad4fd1-c727-4489-84c4-af73386fdf8a'
+    'Date': 'Wed, 06 May 2026 14:55:52 GMT'
+2026-05-06 10:55:53,187 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:53,189 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '274'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'adcc3fe7-495b-11f1-9c46-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:53,454 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '18a9ce24-6945-4726-82f8-3aa94e94ea2a'
+    'Date': 'Wed, 06 May 2026 14:55:53 GMT'
+2026-05-06 10:55:53,455 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:53,458 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '332'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'adf55b38-495b-11f1-989a-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:53,720 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'c8991dac-418b-4f93-a402-565ed0ca4432'
+    'Date': 'Wed, 06 May 2026 14:55:53 GMT'
+2026-05-06 10:55:53,721 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:53,724 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '339'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ae1dd860-495b-11f1-8e06-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:53,971 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'f6aa31d3-6615-47b7-b6ae-e02c91826b97'
+    'Date': 'Wed, 06 May 2026 14:55:53 GMT'
+2026-05-06 10:55:53,972 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:53,975 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '294'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ae441ef6-495b-11f1-97d1-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:54,206 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'd3cca08b-aac5-4d9f-bb8f-c9678e359e15'
+    'Date': 'Wed, 06 May 2026 14:55:53 GMT'
+2026-05-06 10:55:54,207 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:54,210 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '332'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ae681314-495b-11f1-88b8-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:54,458 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '44e4b899-9c54-438b-8379-75d406eea9a6'
+    'Date': 'Wed, 06 May 2026 14:55:54 GMT'
+2026-05-06 10:55:54,458 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:54,464 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '320'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'ae8ec7fc-495b-11f1-97e5-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:54,721 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '7bc1420c-84ac-4670-b6ce-1950a787084f'
+    'Date': 'Wed, 06 May 2026 14:55:54 GMT'
+2026-05-06 10:55:54,722 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:54,724 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '288'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'aeb6856b-495b-11f1-be1b-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:54,982 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'ffe56ced-0b1f-4c41-a317-eee06f2187a3'
+    'Date': 'Wed, 06 May 2026 14:55:54 GMT'
+2026-05-06 10:55:54,983 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:54,985 [INFO] collectors.google_alerts: Google News: 18 menciones relevantes para 'Corporación Zona Franca Santiago'
+2026-05-06 10:55:54,985 [INFO] collectors.google_alerts: Google News RSS: Zona Franca Santiago dominicana
+2026-05-06 10:55:57,270 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '278'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b03afcd5-495b-11f1-98bc-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:57,341 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '4bd14e19-b2a3-4755-8d21-4bfb60324591'
+    'Date': 'Wed, 06 May 2026 14:55:57 GMT'
+2026-05-06 10:55:57,342 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:57,343 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '265'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b0462686-495b-11f1-8952-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:57,415 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '9a6867fa-b201-47f8-a674-9532e39b098a'
+    'Date': 'Wed, 06 May 2026 14:55:57 GMT'
+2026-05-06 10:55:57,415 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:57,417 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '230'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b0516203-495b-11f1-b630-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:57,488 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '9aa20da1-e568-4d7b-a922-baec20c5dc6c'
+    'Date': 'Wed, 06 May 2026 14:55:57 GMT'
+2026-05-06 10:55:57,488 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:57,490 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '266'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b05c9e96-495b-11f1-9cae-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:57,562 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'c6f25327-7d81-40d9-9714-ae5e785801ae'
+    'Date': 'Wed, 06 May 2026 14:55:57 GMT'
+2026-05-06 10:55:57,562 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:57,565 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '283'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b067f3f6-495b-11f1-9b05-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:57,638 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '0b0d369a-c0e5-4efb-94ef-535a38c73248'
+    'Date': 'Wed, 06 May 2026 14:55:57 GMT'
+2026-05-06 10:55:57,639 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:57,643 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '280'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b073d3d7-495b-11f1-977f-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:57,716 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '48716924-5f5b-48f0-8502-edf5aa5293f9'
+    'Date': 'Wed, 06 May 2026 14:55:57 GMT'
+2026-05-06 10:55:57,717 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:57,720 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '263'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b07f9707-495b-11f1-ab5f-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:57,793 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '8f6cf23d-254a-4d87-b5d3-6144b9d001e5'
+    'Date': 'Wed, 06 May 2026 14:55:57 GMT'
+2026-05-06 10:55:57,794 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:57,794 [INFO] collectors.google_alerts: Google News: 25 menciones relevantes para 'Zona Franca Santiago dominicana'
+2026-05-06 10:55:57,794 [INFO] collectors.google_alerts: Google News RSS: PIVEM Santiago empleos
+2026-05-06 10:55:58,898 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '293'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b1337664-495b-11f1-a846-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:58,971 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '7ec37d9b-dfd7-4b15-bc97-c8ed5fa78954'
+    'Date': 'Wed, 06 May 2026 14:55:58 GMT'
+2026-05-06 10:55:58,972 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:58,974 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '232'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b13f0261-495b-11f1-9bf8-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,048 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'bffd14bb-541a-41e7-b6bf-b63a03aeb754'
+    'Date': 'Wed, 06 May 2026 14:55:58 GMT'
+2026-05-06 10:55:59,049 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,053 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '278'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b14af15c-495b-11f1-81e2-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,125 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '666d693e-e418-4b3d-a8e4-0452f6c86c7e'
+    'Date': 'Wed, 06 May 2026 14:55:58 GMT'
+2026-05-06 10:55:59,126 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,128 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '233'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b1566719-495b-11f1-905b-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,198 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '4aef726f-bd48-42f4-9dd5-cf692e61eb8d'
+    'Date': 'Wed, 06 May 2026 14:55:58 GMT'
+2026-05-06 10:55:59,199 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,201 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '316'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b161af91-495b-11f1-91c8-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,275 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'd54801ca-e8a9-4ef4-a4b7-c8f034b17978'
+    'Date': 'Wed, 06 May 2026 14:55:58 GMT'
+2026-05-06 10:55:59,275 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,277 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '263'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b16d241a-495b-11f1-a5ca-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,350 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '4d5fba80-4059-4243-8b18-3492417ff53f'
+    'Date': 'Wed, 06 May 2026 14:55:59 GMT'
+2026-05-06 10:55:59,350 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,352 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '244'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b178998b-495b-11f1-98b5-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,423 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '7054f390-b109-4e80-acfa-54b956120fad'
+    'Date': 'Wed, 06 May 2026 14:55:59 GMT'
+2026-05-06 10:55:59,423 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,426 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '285'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b183e984-495b-11f1-8357-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,497 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '50e4d712-7fcf-49b1-aeba-3a9394979079'
+    'Date': 'Wed, 06 May 2026 14:55:59 GMT'
+2026-05-06 10:55:59,497 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,501 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '245'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b18f5d3a-495b-11f1-8ea2-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,573 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '84c71bc1-ab9c-45e8-aa56-e64738bd90b0'
+    'Date': 'Wed, 06 May 2026 14:55:59 GMT'
+2026-05-06 10:55:59,573 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,575 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '294'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b19aaf01-495b-11f1-bf1e-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,648 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '630d1a90-6bc7-42d7-913d-822c9c0e8f07'
+    'Date': 'Wed, 06 May 2026 14:55:59 GMT'
+2026-05-06 10:55:59,648 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,653 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '251'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b1a68c3b-495b-11f1-92c5-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:55:59,726 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '7e5ebc62-b7dc-426e-9724-da1f79b5aabd'
+    'Date': 'Wed, 06 May 2026 14:55:59 GMT'
+2026-05-06 10:55:59,727 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:55:59,728 [INFO] collectors.google_alerts: Google News: 36 menciones relevantes para 'PIVEM Santiago empleos'
+2026-05-06 10:55:59,728 [INFO] collectors.google_alerts: Google News RSS: parque industrial victor espaillat mera
+2026-05-06 10:56:01,146 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '194'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b28a5cfb-495b-11f1-89e5-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,218 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '679126cf-6b31-43b8-aaba-a2d4f7613287'
+    'Date': 'Wed, 06 May 2026 14:56:00 GMT'
+2026-05-06 10:56:01,218 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,221 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '230'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b295df55-495b-11f1-917d-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,296 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'd8fb1831-66bd-4536-8f72-95420c031b73'
+    'Date': 'Wed, 06 May 2026 14:56:00 GMT'
+2026-05-06 10:56:01,297 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,302 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '288'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b2a22ced-495b-11f1-bc32-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,377 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '13e8b91b-041a-4ada-9ff6-00dbd24d8bfe'
+    'Date': 'Wed, 06 May 2026 14:56:01 GMT'
+2026-05-06 10:56:01,378 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,380 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '255'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b2ae26e3-495b-11f1-8236-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,454 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '8ae30a2d-9367-4ac6-a720-37f611d3cce4'
+    'Date': 'Wed, 06 May 2026 14:56:01 GMT'
+2026-05-06 10:56:01,454 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,456 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '307'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b2b9bb66-495b-11f1-ae07-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,528 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '36da7103-2ff4-4275-8453-415d92e9daa6'
+    'Date': 'Wed, 06 May 2026 14:56:01 GMT'
+2026-05-06 10:56:01,529 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,530 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '267'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b2c50acf-495b-11f1-b95f-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,601 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '1cb3cb7c-4b4c-4264-adab-5eb120357e0c'
+    'Date': 'Wed, 06 May 2026 14:56:01 GMT'
+2026-05-06 10:56:01,602 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,604 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '290'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b2d05ab5-495b-11f1-bf1d-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,677 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '66b1cd7a-8d47-40a6-b7c9-fcc5c1f4a8f5'
+    'Date': 'Wed, 06 May 2026 14:56:01 GMT'
+2026-05-06 10:56:01,678 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,682 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '289'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b2dc28d5-495b-11f1-98cc-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,756 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '05bf8735-874c-44d4-905d-a9076ad97741'
+    'Date': 'Wed, 06 May 2026 14:56:01 GMT'
+2026-05-06 10:56:01,757 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,759 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '248'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b2e7ed8c-495b-11f1-9af4-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:01,831 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'ee4c2a72-a599-4345-ae0a-61fcb498966c'
+    'Date': 'Wed, 06 May 2026 14:56:01 GMT'
+2026-05-06 10:56:01,831 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:01,832 [INFO] collectors.google_alerts: Google News: 45 menciones relevantes para 'parque industrial victor espaillat mera'
+2026-05-06 10:56:01,832 [INFO] collectors.google_alerts: Google News RSS: Zona Franca Santiago inversión
+2026-05-06 10:56:02,999 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '409'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b3a5285f-495b-11f1-a70e-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:03,070 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'ae83d890-6ac5-4033-846e-1293c409ad18'
+    'Date': 'Wed, 06 May 2026 14:56:02 GMT'
+2026-05-06 10:56:03,071 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:03,073 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '232'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b3b0647c-495b-11f1-8e82-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:03,146 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '2bc4c9be-a886-435b-ae96-44727cca440d'
+    'Date': 'Wed, 06 May 2026 14:56:02 GMT'
+2026-05-06 10:56:03,146 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:03,152 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '248'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b3bc82d4-495b-11f1-94cb-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:03,224 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '7fbfaccf-4b6e-4360-a612-052b6570ebae'
+    'Date': 'Wed, 06 May 2026 14:56:02 GMT'
+2026-05-06 10:56:03,225 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:03,231 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '259'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b3c876fb-495b-11f1-adfb-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:03,304 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'ad7750d7-ba84-4107-821d-2ecb1197a2dc'
+    'Date': 'Wed, 06 May 2026 14:56:02 GMT'
+2026-05-06 10:56:03,305 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:03,305 [INFO] collectors.google_alerts: Google News: 49 menciones relevantes para 'Zona Franca Santiago inversión'
+2026-05-06 10:56:03,306 [INFO] main: Modo DRY RUN: Omitiendo guardado de 49 menciones
+2026-05-06 10:56:03,306 [INFO] collectors.google_alerts: Google News RSS: CAPEX Santiago capacitación
+2026-05-06 10:56:04,496 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '251'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4899d3e-495b-11f1-a405-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:04,569 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'f4138770-52ec-4445-b911-c803b3d977b2'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:04,570 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:04,572 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '339'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4953375-495b-11f1-beb5-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:04,645 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '3a54f4ea-e843-459e-ad6d-f0dc3f57b15a'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:04,646 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:04,648 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '329'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4a0b694-495b-11f1-b68c-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:04,720 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'fbef6d64-a124-4e70-bada-0681856f95a6'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:04,720 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:04,722 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '255'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4ac0145-495b-11f1-8a83-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:04,795 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '0858f9d5-73ef-4524-9e38-39d8e918ffd8'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:04,795 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:04,798 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '204'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4b79461-495b-11f1-88fe-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:04,869 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'e11f89b8-3235-43f7-b27b-1affca8c43df'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:04,869 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:04,871 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '204'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4c2ca51-495b-11f1-9bfa-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:04,944 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'd813e022-0f65-48ca-bf3a-0e7310e28bbe'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:04,944 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:04,946 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '302'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4ce415e-495b-11f1-8a69-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:05,024 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '80f4caa3-d774-40a8-a41c-ed9a6af4713f'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:05,025 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:05,026 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '365'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4da7f72-495b-11f1-8185-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:05,098 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '9b2ee443-ce0b-44f1-873f-f1af3f6dbdec'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:05,099 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:05,102 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '248'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4e6141f-495b-11f1-bdf1-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:05,174 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': 'c0ed20a5-2b7e-4089-afbe-c5241d8f3961'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:05,174 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:05,176 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '289'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b4f14edd-495b-11f1-b708-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:05,255 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '00efb73c-4a81-4ad2-b935-c5c50629a17e'
+    'Date': 'Wed, 06 May 2026 14:56:04 GMT'
+2026-05-06 10:56:05,256 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:05,258 [INFO] collectors.google_alerts: Google News: 10 menciones relevantes para 'CAPEX Santiago capacitación'
+2026-05-06 10:56:05,259 [INFO] collectors.google_alerts: Google News RSS: CAPEX Santiago cursos
+2026-05-06 10:56:06,494 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '204'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b5ba62c0-495b-11f1-93ad-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:06,568 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '82f46b10-9c0a-431a-9777-fb0550aa5262'
+    'Date': 'Wed, 06 May 2026 14:56:06 GMT'
+2026-05-06 10:56:06,569 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:06,578 [INFO] collectors.google_alerts: Google News: 11 menciones relevantes para 'CAPEX Santiago cursos'
+2026-05-06 10:56:06,578 [INFO] collectors.google_alerts: Google News RSS: CAPEX Santiago diplomados
+2026-05-06 10:56:07,930 [INFO] collectors.google_alerts: Google News: 11 menciones relevantes para 'CAPEX Santiago diplomados'
+2026-05-06 10:56:07,930 [INFO] collectors.google_alerts: Google News RSS: Infotep Santiago CZFS
+2026-05-06 10:56:08,692 [INFO] collectors.google_alerts: Google News: 11 menciones relevantes para 'Infotep Santiago CZFS'
+2026-05-06 10:56:08,693 [INFO] collectors.google_alerts: Google News RSS: educación técnica Santiago de los Caballeros
+2026-05-06 10:56:09,863 [INFO] collectors.google_alerts: Google News: 11 menciones relevantes para 'educación técnica Santiago de los Caballeros'
+2026-05-06 10:56:09,863 [INFO] main: Modo DRY RUN: Omitiendo guardado de 11 menciones
+2026-05-06 10:56:09,863 [INFO] collectors.google_alerts: Google News RSS: PIVEM Santiago de los Caballeros
+2026-05-06 10:56:10,727 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '263'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b84060b7-495b-11f1-a204-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:10,802 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '7cd2595d-6b7a-42d6-b145-4a78c6fb7086'
+    'Date': 'Wed, 06 May 2026 14:56:10 GMT'
+2026-05-06 10:56:10,802 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:10,805 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '232'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b84c4bb6-495b-11f1-90cf-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:10,878 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '8d32dd27-a477-452f-95bc-b091939c6816'
+    'Date': 'Wed, 06 May 2026 14:56:10 GMT'
+2026-05-06 10:56:10,878 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:10,886 [INFO] collectors.google_alerts: Google News: 2 menciones relevantes para 'PIVEM Santiago de los Caballeros'
+2026-05-06 10:56:10,887 [INFO] collectors.google_alerts: Google News RSS: Parque Industrial Víctor Espaillat Mera noticias
+2026-05-06 10:56:12,243 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '316'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b927b5e5-495b-11f1-8712-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:12,317 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '0812891a-926f-4a5d-8ea0-1b9859fd4623'
+    'Date': 'Wed, 06 May 2026 14:56:11 GMT'
+2026-05-06 10:56:12,318 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:12,321 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '233'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b9337e58-495b-11f1-8ab1-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:12,396 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '060a6346-55ef-48a1-a095-085bc0c2ff4b'
+    'Date': 'Wed, 06 May 2026 14:56:11 GMT'
+2026-05-06 10:56:12,397 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:12,400 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '273'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b93f893d-495b-11f1-aa6b-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:12,472 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '263e5e6b-d46b-4016-a050-0bdc69564404'
+    'Date': 'Wed, 06 May 2026 14:56:12 GMT'
+2026-05-06 10:56:12,473 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:12,477 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '271'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b94b636d-495b-11f1-8fea-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:12,547 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '9a48c2fb-4edd-4674-be11-ae42536376e2'
+    'Date': 'Wed, 06 May 2026 14:56:12 GMT'
+2026-05-06 10:56:12,547 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:12,551 [INFO] collectors.google_alerts: Google News: 6 menciones relevantes para 'Parque Industrial Víctor Espaillat Mera noticias'
+2026-05-06 10:56:12,552 [INFO] collectors.google_alerts: Google News RSS: empleos zona franca Santiago
+2026-05-06 10:56:13,520 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '293'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'b9ea7797-495b-11f1-bcca-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:13,592 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '9c3f6beb-07fa-4018-a834-93b6f3800132'
+    'Date': 'Wed, 06 May 2026 14:56:13 GMT'
+2026-05-06 10:56:13,593 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:13,598 [INFO] collectors.google_alerts: Google News: 7 menciones relevantes para 'empleos zona franca Santiago'
+2026-05-06 10:56:13,599 [INFO] main: Modo DRY RUN: Omitiendo guardado de 7 menciones
+2026-05-06 10:56:13,599 [INFO] collectors.google_alerts: Google News RSS: Plazona Santiago
+2026-05-06 10:56:14,879 [INFO] collectors.google_alerts: Google News: 0 menciones relevantes para 'Plazona Santiago'
+2026-05-06 10:56:14,880 [INFO] collectors.google_alerts: Google News RSS: PlaZona centro comercial Santiago
+2026-05-06 10:56:16,073 [INFO] collectors.google_alerts: Google News: 0 menciones relevantes para 'PlaZona centro comercial Santiago'
+2026-05-06 10:56:16,073 [INFO] collectors.google_alerts: Google News RSS: MÉDICA CZFS Santiago
+2026-05-06 10:56:18,271 [INFO] azure.core.pipeline.policies.http_logging_policy: Request URL: 'https://czfsslproyect.cognitiveservices.azure.com/language/:analyze-text?api-version=2023-04-01'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '366'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'bcbf8d1f-495b-11f1-b175-b81ea450a528'
+    'User-Agent': 'azsdk-python-ai-textanalytics/5.3.0 Python/3.14.0 (Windows-11-10.0.26200-SP0)'
+    'Ocp-Apim-Subscription-Key': 'REDACTED'
+A body is sent with the request
+2026-05-06 10:56:18,507 [INFO] azure.core.pipeline.policies.http_logging_policy: Response status: 401
+Response headers:
+    'Content-Length': '224'
+    'Content-Type': 'application/json'
+    'apim-request-id': '12f922dd-102d-47ff-96fd-ed6f6477c425'
+    'Date': 'Wed, 06 May 2026 14:56:18 GMT'
+2026-05-06 10:56:18,507 [ERROR] processors.azure_sentiment: Error Azure analyze_sentiment: (401) Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+Code: 401
+Message: Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.
+2026-05-06 10:56:18,515 [INFO] collectors.google_alerts: Google News: 1 menciones relevantes para 'MÉDICA CZFS Santiago'
+2026-05-06 10:56:18,515 [INFO] collectors.google_alerts: Google News RSS: centro médico zona franca Santiago
+2026-05-06 10:56:20,978 [INFO] collectors.google_alerts: Google News: 1 menciones relevantes para 'centro médico zona franca Santiago'
+2026-05-06 10:56:20,978 [INFO] collectors.google_alerts: Google News RSS: atención salud PIVEM Santiago
+2026-05-06 10:56:22,346 [INFO] collectors.google_alerts: Google News: 1 menciones relevantes para 'atención salud PIVEM Santiago'
+2026-05-06 10:56:22,347 [WARNING] main: Entidad desconocida (no existe en BD): 'medica-czfs'
+2026-05-06 10:56:22,347 [INFO] main:   -> 0 nuevas menciones
+2026-05-06 10:56:22,347 [INFO] main: 
+[3/3] Reddit...
+2026-05-06 10:56:29,668 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'zona franca santiago dominicana'
+2026-05-06 10:56:37,219 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'zona franca santiago mera'
+2026-05-06 10:56:44,438 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'czfs santiago'
+2026-05-06 10:56:51,866 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'corporacion zona franca santiago'
+2026-05-06 10:56:59,332 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'corporación zona franca santiago'
+2026-05-06 10:57:06,676 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex santiago'
+2026-05-06 10:57:13,974 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex capacitacion'
+2026-05-06 10:57:21,348 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex capacitación'
+2026-05-06 10:57:28,516 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex rd'
+2026-05-06 10:57:35,785 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex taller'
+2026-05-06 10:57:43,106 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex egresados'
+2026-05-06 10:57:46,755 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex formacion'
+2026-05-06 10:57:49,227 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'capex formación'
+2026-05-06 10:57:51,874 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'pivem'
+2026-05-06 10:57:54,342 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'parque industrial villa europa'
+2026-05-06 10:57:56,690 [INFO] collectors.reddit_collector: Reddit: 0 menciones para 'parque industrial villa europa mediterráneo'
+2026-05-06 10:57:58,191 [INFO] main:   -> 0 nuevas menciones
+2026-05-06 10:57:58,192 [INFO] main: 
+============================================================
+2026-05-06 10:57:58,192 [INFO] main: COMPLETADO. Total nuevas menciones: 0
+2026-05-06 10:57:58,192 [INFO] main: ============================================================
+2026-05-06 11:18:43,293 [ERROR] main: supabase-py no instalado. pip install supabase

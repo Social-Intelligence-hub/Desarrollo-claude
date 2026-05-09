@@ -197,40 +197,58 @@ class SentimentAnalyzer:
 
     def _analyze_demo(self, text: str) -> dict:
         """
-        Análisis demo basado en heurísticas simples para desarrollo.
+        Análisis demo basado en heurísticas avanzadas:
+        1. Sentimiento Institucional Positivo (Alianzas, Logros)
+        2. Palabras clave estándar
         """
         text_lower = text.lower()
+        
+        # Heurística: Positivo Institucional
+        institutional_positives = [
+            "alianza", "convenio", "acuerdo", "graduación", "graduacion", "éxito", "exito", 
+            "reconocimiento", "premia", "mejora", "innovación", "innovacion", "lanzamiento", 
+            "certificación", "certificacion", "aprobado", "colaboración", "colaboracion",
+            "inauguración", "inauguracion", "crecimiento", "desarrollo", "fortalece"
+        ]
+        
         positive_words = [
             "excelente", "bueno", "genial", "increíble", "recomiendo",
             "profesional", "satisfecho", "feliz", "gracias", "perfecto",
             "bien", "rápido", "eficiente", "calidad", "servicio"
         ]
+        
         negative_words = [
             "malo", "pésimo", "terrible", "horrible", "decepcionante",
             "problema", "error", "falla", "tarde", "lento", "caro",
-            "espera", "mal", "peor", "nunca", "jamás"
+            "espera", "mal", "peor", "nunca", "jamás", "crisis", "queja"
         ]
 
-        pos_score = sum(1 for w in positive_words if w in text_lower)
-        neg_score = sum(1 for w in negative_words if w in text_lower)
+        # Puntuar
+        inst_score = sum(2 for w in institutional_positives if w in text_lower)
+        pos_score = sum(1 for w in positive_words if w in text_lower) + inst_score
+        neg_score = sum(1.5 for w in negative_words if w in text_lower) # Penalizar negativo más fuerte
 
         if pos_score > neg_score:
             label = "positive"
-            scores = {"positive": 0.75, "negative": 0.10, "neutral": 0.15}
+            # Si es por institucional, dar mucha confianza
+            conf = 0.85 if inst_score > 0 else 0.75
+            scores = {"positive": 0.85 if inst_score > 0 else 0.70, "negative": 0.05, "neutral": 0.10 if inst_score > 0 else 0.25}
         elif neg_score > pos_score:
             label = "negative"
-            scores = {"positive": 0.10, "negative": 0.75, "neutral": 0.15}
+            conf = 0.80
+            scores = {"positive": 0.05, "negative": 0.80, "neutral": 0.15}
         else:
             label = "neutral"
-            scores = {"positive": 0.25, "negative": 0.20, "neutral": 0.55}
+            conf = 0.60
+            scores = {"positive": 0.20, "negative": 0.20, "neutral": 0.60}
 
         return {
             "label": label,
             "scores": scores,
-            "confidence": 0.70,
+            "confidence": conf,
             "dominican_override": False,
             "dominican_term": None,
-            "method": "demo",
+            "method": "heuristic_demo",
         }
 
     def _generate_scores_for_label(self, label: str) -> dict:

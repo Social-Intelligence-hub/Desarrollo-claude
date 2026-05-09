@@ -10,10 +10,10 @@ const supabase = createClient(
 );
 
 /**
- * DELETE /api/mentions/reject
- * Elimina una mención irrelevante de la base de datos.
+ * POST /api/mentions/feedback
+ * Elimina una mención irrelevante de la base de datos y añade feedback.
  */
-export async function DELETE(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const { id, reason } = await request.json();
 

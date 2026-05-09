@@ -33,7 +33,14 @@ class RelevanceFilter:
             # 2. Cargar todos los embeddings de la blacklist en memoria para comparación rápida
             res = self.supabase.table("embeddings_blacklist").select("embedding").execute()
             if res.data:
-                self.blacklist_embeddings = [np.array(row["embedding"]) for row in res.data]
+                import json
+                parsed_embeddings = []
+                for row in res.data:
+                    emb = row["embedding"]
+                    if isinstance(emb, str):
+                        emb = json.loads(emb)
+                    parsed_embeddings.append(np.array(emb))
+                self.blacklist_embeddings = parsed_embeddings
                 logger.info(f"Filtro Semántico cargado con {len(self.blacklist_embeddings)} vectores de ruido.")
             else:
                 logger.info("Filtro Semántico: No hay datos en la lista negra todavía.")

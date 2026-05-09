@@ -194,12 +194,14 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                   ].map(reason => (
                     <button
                       key={reason}
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         setShowRejectMenu(false);
                         setIsUpdating(true);
                         try {
-                          const res = await fetch("/api/mentions/reject", {
-                            method: "DELETE",
+                          const res = await fetch("/api/mentions/feedback", {
+                            method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ id: mention.id, reason })
                           });
@@ -208,6 +210,9 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                           } else {
                             alert("Error eliminando mención");
                           }
+                        } catch (err) {
+                          console.error(err);
+                          alert("Error de red al eliminar mención");
                         } finally {
                           setIsUpdating(false);
                         }
