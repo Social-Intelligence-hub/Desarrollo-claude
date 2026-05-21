@@ -32,7 +32,7 @@ payload = {
     "id": dummy_id,
     "reason": "Spam o Promoción"
 }
-resp = requests.post("http://localhost:3000/api/mentions/moderate", json=payload)
+resp = requests.post("http://localhost:3000/api/mentions/refine", json=payload)
 print(resp.status_code, resp.text)
 
 print(supabase.table("relevance_feedback").select("*").eq("mention_id", dummy_id).execute())

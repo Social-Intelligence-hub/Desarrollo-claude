@@ -393,7 +393,6 @@ export default function DashboardPage() {
       sentiment: state.selectedSentiment,
       sourceSlug: state.selectedSource,
       searchQuery: state.searchQuery,
-      capexType: state.capexType,
       dateFrom: from,
       dateTo: to,
       page: 0,
@@ -688,7 +687,6 @@ export default function DashboardPage() {
                 >
                   <option value="all">Todas las fuentes</option>
                   <option value="google_news">Google News</option>
-                  <option value="google_reviews">Google Reviews</option>
                   <option value="active_search">Búsqueda Activa (Foros)</option>
                   <option value="reddit">Reddit</option>
                 </select>
@@ -720,7 +718,7 @@ export default function DashboardPage() {
           )}
 
           {/* Aviso CAPEX financiero */}
-          {state.capexType === "financial" && (
+          {state.capexType === "financial" ? (
             <div className="mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50 flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div>
@@ -733,7 +731,7 @@ export default function DashboardPage() {
                 </p>
               </div>
             </div>
-          )}
+          ) : null}
 
           {/* Error mentions */}
           {state.errorMentions && !state.loadingMentions && (

@@ -389,4 +389,48 @@ export async function fetchSourceStats(entitySlug: string): Promise<Array<{ sour
     .map(([source_name, count]) => ({ source_name, count }))
     .sort((a, b) => b.count - a.count);
 }
+export async function rejectMention(id: string, reason: string): Promise<boolean> {
+  try {
+    // 1. Obtener los detalles de la mención antes de borrarla
+    const { data: mention, error: selectError } = await supabase
+      .from("mentions")
+      .select("text_original")
+      .eq("id", id)
+      .single();
+      
+    if (selectError) {
+      console.error("Error fetching mention for rejection:", selectError);
+    }
 
+    // 2. Si hay una razón y encontramos el texto, lo guardamos para la "lista negra"
+    if (mention && reason) {
+      const { error: insertError } = await supabase
+        .from("relevance_feedback")
+        .insert({
+          mention_id: id,
+          text_original: mention.text_original,
+          reason: reason
+        });
+        
+      if (insertError) {
+        console.warn("No se pudo guardar feedback:", insertError);
+      }
+    }
+
+    // 3. Borrar la mención
+    const { error } = await supabase
+      .from("mentions")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error deleting mention:", error);
+      return false;
+    }
+
+    return true;
+  } catch (e) {
+    console.error("rejectMention Exception:", e);
+    return false;
+  }
+}

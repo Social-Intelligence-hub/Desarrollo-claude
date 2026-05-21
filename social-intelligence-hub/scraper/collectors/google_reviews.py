@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 LOCATIONS = {
     "pivem": {
         "name": "Parque Industrial Víctor Espaillat Mera (PIVEM)",
-        "entity_slug": "czfs",
+        "entity_slug": "pivem",
         "search_query": "Parque Industrial Víctor Espaillat Mera Santiago",
         "url_hint": "https://www.google.com/maps/search/Parque+Industrial+Víctor+Espaillat+Mera+Santiago",
     },
@@ -56,31 +56,49 @@ class GoogleReviewsCollector:
         self.analyzer = sentiment_analyzer
 
     def _parse_relative_date(self, text: str) -> str:
-        """Convierte fechas relativas ('hace 2 semanas') a ISO timestamp."""
+        """Convierte fechas relativas ('hace 2 semanas') o absolutas a ISO timestamp."""
         if not text:
             return datetime.now(timezone.utc).isoformat()
             
-        text = text.lower()
+        text = text.lower().strip()
         now = datetime.now(timezone.utc)
         
-        # Extraer número, asume 1 si dice "un", "una" o no hay número
+        # 1. Intentar como fecha absoluta (Ej: "15 de enero de 2024")
+        months_es = {
+            "enero": 1, "febrero": 2, "marzo": 3, "abril": 4,
+            "mayo": 5, "junio": 6, "julio": 7, "agosto": 8,
+            "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
+        }
+        
+        abs_match_es = re.search(r'(\d+)\s+de\s+([a-z]+)\s+de\s+(\d{4})', text)
+        if abs_match_es:
+            day = int(abs_match_es.group(1))
+            month_name = abs_match_es.group(2)
+            year = int(abs_match_es.group(3))
+            month = months_es.get(month_name)
+            if month:
+                try:
+                    return datetime(year, month, day, tzinfo=timezone.utc).isoformat()
+                except ValueError: pass
+
+        # 2. Intentar como fecha relativa ("hace X ..." o "X ... ago")
         match = re.search(r'(\d+)', text)
         val = int(match.group(1)) if match else 1
         
-        if "un " in text or "una " in text:
+        if any(w in text for w in ["un ", "una ", " a ", " an "]):
             val = 1
             
-        if "minuto" in text:
+        if any(w in text for w in ["minuto", "minute"]):
             delta = timedelta(minutes=val)
-        elif "hora" in text:
+        elif any(w in text for w in ["hora", "hour"]):
             delta = timedelta(hours=val)
-        elif "día" in text or "dia" in text:
+        elif any(w in text for w in ["día", "dia", "day"]):
             delta = timedelta(days=val)
-        elif "semana" in text:
+        elif any(w in text for w in ["semana", "week"]):
             delta = timedelta(weeks=val)
-        elif "mes" in text:
+        elif any(w in text for w in ["mes", "month"]):
             delta = timedelta(days=val * 30)
-        elif "año" in text or "ano" in text:
+        elif any(w in text for w in ["año", "ano", "year"]):
             delta = timedelta(days=val * 365)
         else:
             delta = timedelta(0)
@@ -105,12 +123,13 @@ class GoogleReviewsCollector:
         config = LOCATIONS[location_key]
         logger.info(f"Recolectando reviews de: {config['name']}")
 
-        for attempt in range(1):
+        for attempt in range(1, 4):
             try:
                 from playwright.async_api import async_playwright
 
                 async with async_playwright() as p:
-                    browser = await p.chromium.launch(headless=False)
+                    # Headless por defecto para evitar ventanas emergentes
+                    browser = await p.chromium.launch(headless=True)
                     context = await browser.new_context(
                         user_agent=(
                             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -125,7 +144,9 @@ class GoogleReviewsCollector:
                         f"https://www.google.com/maps/search/"
                         f"{config['search_query'].replace(' ', '+')}"
                     )
-                    await page.goto(search_url, wait_until="networkidle", timeout=30000)
+                    
+                    # Timeout reducido para verificación rápida (5s)
+                    await page.goto(search_url, wait_until="load", timeout=5000)
                     await page.wait_for_timeout(5000)
 
                     reviews = await self._extract_reviews_from_page(page, config, max_reviews)
@@ -134,15 +155,15 @@ class GoogleReviewsCollector:
                     if reviews:
                         return reviews
                     else:
-                        logger.warning(f"Intento {attempt + 1}: No se extrajeron reseñas para {location_key}")
+                        logger.warning(f"Intento {attempt}/3: No se extrajeron reseñas para {location_key}")
 
-            except ImportError as e:
-                logger.error(f"Playwright no disponible: {e}")
-                break
             except Exception as e:
-                logger.warning(f"Error en intento {attempt + 1} para {location_key}: {e}")
-                import asyncio
-                await asyncio.sleep(2)
+                logger.error(f"Error en intento {attempt}/3 para {location_key}: {e}")
+                if attempt < 3:
+                    import asyncio
+                    await asyncio.sleep(3 * attempt) # Backoff
+                else:
+                    logger.error(f"Fallo definitivo para {location_key} tras 3 intentos.")
 
         # Si llegamos aquí, los 3 intentos fallaron o no hay reseñas extraídas
         logger.error(f"Usando fallback real de datos para {location_key} debido a bloqueo anti-bot")
@@ -272,7 +293,12 @@ class GoogleReviewsCollector:
                 else:
                     return None
 
-            if not text and not star_rating:
+            # Validar campos críticos para cumplir con el checklist de calidad
+            if not author_name or author_name == "Anónimo":
+                return None
+            if not text or len(text.strip()) < 5:
+                return None
+            if not star_rating:
                 return None
 
             # Hash para deduplicación

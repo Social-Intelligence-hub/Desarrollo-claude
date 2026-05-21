@@ -106,6 +106,7 @@ def save_mentions_rest(mentions, entity_map, source_map):
             "sentiment_score": m.get("sentiment_score"),
             "confidence_score": m.get("confidence_score", 0.5),
             "published_at": m.get("published_at"),
+            "star_rating": m.get("star_rating"),
             "language": m.get("language", "es"),
             "content_hash": m.get("content_hash")
         }

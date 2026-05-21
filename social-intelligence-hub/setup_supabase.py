@@ -10,11 +10,16 @@ import sys
 import json
 import urllib.request
 import urllib.error
+try:
+    from dotenv import load_dotenv
+    load_dotenv("scraper/.env")
+except ImportError:
+    pass
 
 # ── Configuración ─────────────────────────────────────────────
 # SINCRONIZADO CON frontend/lib/supabase.ts
-SUPABASE_URL = "https://zhbutmbnhzcgrlkuafwb.supabase.co"
-SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoYnV0bWJuaHpjZ3Jsa3VhZndiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjM4NTU3NCwiZXhwIjoyMDkxOTYxNTc0fQ.hsBldRNa4CuQRsVIvsXp80mW9kACz4XLeWuc36lykGQ"
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
 HEADERS = {
     "apikey": SERVICE_ROLE_KEY,

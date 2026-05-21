@@ -200,19 +200,16 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                         setShowRejectMenu(false);
                         setIsUpdating(true);
                         try {
-                          const res = await fetch("/api/mentions/moderate", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ id: mention.id, reason })
-                          });
-                          if (res.ok) {
+                          const { rejectMention } = await import("@/lib/supabase");
+                          const ok = await rejectMention(mention.id, reason);
+                          if (ok) {
                             window.location.reload();
                           } else {
                             alert("Error eliminando mención");
                           }
                         } catch (err) {
                           console.error(err);
-                          alert("Error de red al eliminar mención");
+                          alert("Error al procesar la eliminación");
                         } finally {
                           setIsUpdating(false);
                         }

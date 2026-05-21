@@ -113,11 +113,17 @@ def run():
                 total_found += 1
                 content_hash = hashlib.sha256(f"{link}:{entity_slug}".encode()).hexdigest()
                 
+                # Extraer fecha
+                from time import mktime
+                published_dt = datetime.now(timezone.utc)
+                if entry.get("published_parsed"):
+                    published_dt = datetime.fromtimestamp(mktime(entry.published_parsed), timezone.utc)
+                
                 mention = {
                     "text_original": full_text[:1500],
                     "author_name": "Google News",
                     "source_url": link,
-                    "published_at": datetime.now(timezone.utc).isoformat(),
+                    "published_at": published_dt.isoformat(),
                     "content_hash": content_hash
                 }
                 
