@@ -62,7 +62,7 @@
 | Fase | Objetivo | Estado |
 |------|----------|--------|
 | **F0** | Higiene y seguridad (branch, anon key, deps, .env) | ✅ |
-| **F1** | Schema SQL (migraciones 002–006, aplicadas y verificadas) | 🟦 |
+| **F1** | Schema SQL: estructura 001–005 aplicada + RLS (006 seed → F4) | ✅ |
 | **F4** | Setup Zona Franca (discover_entities + seed 35 empresas) | ⬜ |
 | **F2** | Scraper: NLP Gemini + orquestación + colectores | ⬜ |
 | **F3** | Frontend parametrizado por conglomerado | ⬜ |
@@ -96,9 +96,13 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 
 ---
 
-### F1 — Schema SQL (migraciones 002–006) 🟦
+### F1 — Schema SQL (estructura 001–005 + RLS) ✅
 
-**Objetivo**: crear el modelo de datos v3 completo en el proyecto Supabase nuevo y dejar RLS activo. Verificar 35 entidades sembradas.
+**Objetivo**: crear el modelo de datos v3 completo y dejar RLS activo. (El seed de 35 entidades y la verificación `COUNT=35` se trasladaron a **F4**, porque la lista de empresas es el output de discovery de F4. F1 entrega la estructura, que es lo realmente bloqueante.)
+
+**Hecho y verificado (2026-06-10)**:
+- Aplicadas vía Supabase MCP en `ejivsqgumonogddiftvq`: `001_initial_schema` (estructura limpia — sin demo del MVP, con todas las `sources` v3, y fix `COUNT(*)→COUNT(m.id)` en `v_sentiment_summary`) y `002_v3_conglomerates_configs_rls` (002+003+004+005 en **una transacción atómica**). Archivos en `supabase/migrations/` (001–005, separados para lectura).
+- **Verificación** (`pg_class` / `pg_policy`): **7 tablas** con `rls_activo=true`. Lectura pública (1 policy `SELECT`) en `conglomerates`, `entities`, `mentions`, `sources`, `crisis_alerts`. `entity_configs` y `scraper_runs` **sin policy anon** (internas → solo `service_role`). **Ninguna** policy de escritura para anon → criterio de seguridad #7 garantizado a nivel de esquema.
 
 **Cómo se hará**:
 - El proyecto está **vacío**, así que primero se aplica `001_initial_schema.sql` (entities, sources, mentions, scraper_runs, crisis_alerts, vistas) y luego las nuevas 002–006.
@@ -201,4 +205,5 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 |-------|--------|
 | 2026-06-10 | Inicio. Lectura de PROYECTO.md + pipeline PDF. Confirmado repo canónico y proyecto Supabase nuevo (`ejivsqgumonogddiftvq`). |
 | 2026-06-10 | **F0 completado**: rama `feat/v3-local-first`; Service Role Key removida del frontend; deps Azure→google-genai; `.env`/`.env.example` (scraper+frontend). Self-check de seguridad OK. |
-| 2026-06-10 | Bitácora creada. Remote `claude` configurado hacia `Desarrollo-claude`. |
+| 2026-06-10 | Bitácora creada. Remote `claude` configurado hacia `Desarrollo-claude`. F0 publicado (rama `feat/v3-local-first`). |
+| 2026-06-10 | **F1 estructura completada**: migraciones 001–005 aplicadas en `ejivsqgumonogddiftvq`. 7 tablas, RLS activo en todas, lectura pública en las 5 de cara al cliente. Seed 35 + `COUNT` pasan a F4. |
