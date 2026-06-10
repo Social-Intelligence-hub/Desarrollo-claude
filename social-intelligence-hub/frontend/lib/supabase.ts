@@ -1,10 +1,23 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = "https://zhbutmbnhzcgrlkuafwb.supabase.co"
-// Utilizando Service Role Key temporalmente para puentear el RLS que está bloqueando la app en localhost
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoYnV0bWJuaHpjZ3Jsa3VhZndiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjM4NTU3NCwiZXhwIjoyMDkxOTYxNTc0fQ.hsBldRNa4CuQRsVIvsXp80mW9kACz4XLeWuc36lykGQ"
+// ============================================================
+// Cliente público de Supabase — SOLO anon key.
+// La Service Role Key fue retirada del cliente (saneamiento de seguridad F0):
+// exponerla daría acceso total a la BD saltando RLS. Las escrituras viven del
+// lado del scraper (service role en servidor / GitHub Actions). El frontend solo
+// lee tablas y vistas con política de lectura pública (RLS — migración 005).
+// ============================================================
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    "Faltan NEXT_PUBLIC_SUPABASE_URL o NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
+    "Defínelas en frontend/.env.local (ver .env.example) y en las env vars de Vercel."
+  );
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // ============================================================
 // Connection test helper (used by health indicator in footer)

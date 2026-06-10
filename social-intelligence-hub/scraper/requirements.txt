@@ -1,10 +1,20 @@
+# ============================================================
+# Social Intelligence Hub v3 - Scraper (Python 3.13)
+# Versiones fijadas para reproducibilidad laptop local <-> GitHub Actions.
+# ============================================================
 playwright==1.49.0
 beautifulsoup4==4.12.3
 requests==2.32.3
 supabase==2.5.3
 python-dotenv==1.0.1
-azure-ai-textanalytics==5.3.0
 feedparser==6.0.11
 schedule==1.2.2
 praw==7.7.1
 googlesearch-python==1.2.3
+
+# NLP — SDK unificado de Google Gen AI (reemplaza a azure-ai-textanalytics).
+# Gemini 2.0 Flash. API: from google import genai -> genai.Client().models.generate_content(...)
+google-genai==1.75.0
+
+# Nota: los colectores Meta (Instagram/Facebook) usan la Graph API vía `requests`
+# (ya incluido). No se requiere SDK adicional; quedan en stub hasta aprobación de Meta.
