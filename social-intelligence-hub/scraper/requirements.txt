@@ -12,8 +12,8 @@ schedule==1.2.2
 praw==7.7.1
 googlesearch-python==1.2.3
 
-# NLP — SDK unificado de Google Gen AI (reemplaza a azure-ai-textanalytics).
-# Gemini 2.0 Flash. API: from google import genai -> genai.Client().models.generate_content(...)
+# NLP — Groq (principal) + Google GenAI (mantenido como fallback).
+groq==0.28.0
 google-genai==1.75.0
 
 # Nota: los colectores Meta (Instagram/Facebook) usan la Graph API vía `requests`

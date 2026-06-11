@@ -296,7 +296,7 @@ async def run(args):
     logger.info("Conglomerado: %s — entidades en plan: %d — colectores: %s",
                 conglomerate["name"], len(workplan), collectors_active)
 
-    from processors.gemini_sentiment import SentimentAnalyzer
+    from processors.groq_sentiment import SentimentAnalyzer
     analyzer = SentimentAnalyzer()
 
     total_collected = 0

@@ -25,7 +25,7 @@ except ImportError:
     pass
 
 from supabase import create_client
-from processors.gemini_sentiment import SentimentAnalyzer
+from processors.groq_sentiment import SentimentAnalyzer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("reanalyze")
