@@ -312,9 +312,11 @@ class GoogleAlertsCollector:
 
         for query in queries:
             encoded = quote_plus(query)
+            # No site:do filter — allows international cigar/trade press that covers Dominican
+            # operations. The geo_requirement check in the heuristic rejects off-topic geography.
             url = (
                 f"https://news.google.com/rss/search?"
-                f"q={encoded}+site:do&hl=es-419&gl=DO&ceid=DO:es-419"
+                f"q={encoded}&hl=es-419&gl=DO&ceid=DO:es-419"
             )
 
             try:
