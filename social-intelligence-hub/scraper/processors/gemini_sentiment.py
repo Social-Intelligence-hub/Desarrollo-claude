@@ -37,7 +37,7 @@ except ImportError:
     GENAI_AVAILABLE = False
     logger.warning("google-genai no instalado. La cascada usará léxico + heurístico.")
 
-GEMINI_MODEL = "gemini-3.5-flash"
+GEMINI_MODEL = "gemini-2.5-flash-lite"
 BATCH_SIZE = 10  # menciones por request de Gemini (control de cuota: 1500 req/día free)
 
 # ────────────────────────────────────────────────────────────────────────────
