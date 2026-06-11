@@ -113,8 +113,14 @@ def load_workplan(supabase, conglomerate_slug: str, entity_filter: str | None) -
 
     workplan = []
     for e in entities:
-        cfg_rows = e.pop("entity_configs", None) or []
-        config = cfg_rows[0] if cfg_rows else {}
+        raw_cfg = e.pop("entity_configs", None)
+        # Supabase puede devolver list (1-a-many) o dict (1-a-1 reconocido por PostgREST)
+        if isinstance(raw_cfg, list):
+            config = raw_cfg[0] if raw_cfg else {}
+        elif isinstance(raw_cfg, dict):
+            config = raw_cfg
+        else:
+            config = {}
         workplan.append({"entity": e, "config": config})
     return conglomerate, workplan
 
