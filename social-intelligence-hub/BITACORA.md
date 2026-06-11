@@ -43,7 +43,7 @@
 |--------|-----------|--------|
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `frontend/.env.local` (gitignored) | ✅ cargada (key pública por diseño) |
 | `NEXT_PUBLIC_SUPABASE_URL` | `frontend/.env.local` + `scraper/.env` | ✅ |
-| `GEMINI_API_KEY` | `scraper/.env` (gitignored) | ✅ cargada — ⚠️ formato atípico `AQ.Ab8RN6...` (no `AIza...`); validar conectividad en F2 |
+| `GEMINI_API_KEY` | `scraper/.env` (gitignored) | ⚠️ **REEMPLAZAR**: la key actual devuelve 429 RESOURCE_EXHAUSTED con `limit: 0` (cuota free-tier nula). Obtener una nueva en https://aistudio.google.com/apikey. Mientras tanto, el scraper usa el heurístico de respaldo. |
 | `SUPABASE_SERVICE_ROLE_KEY` | `scraper/.env` (gitignored) | ⛔ **PENDIENTE** — el usuario debe pegarla (Dashboard → Settings → API → service_role). Solo se necesita para F5/F7 (escritura). El dry-run no la usa. |
 | Tokens Meta (IG/FB) | `scraper/.env` | ⬜ vacíos a propósito — colectores en stub |
 
@@ -64,7 +64,7 @@
 | **F0** | Higiene y seguridad (branch, anon key, deps, .env) | ✅ |
 | **F1** | Schema SQL: estructura 001–005 aplicada + RLS (006 seed → F4) | ✅ |
 | **F4** | Setup Zona Franca (seed 35 reales + discover_entities.py) | ✅ |
-| **F2** | Scraper: NLP Gemini + orquestación + colectores | ⬜ |
+| **F2** | Scraper: NLP Gemini + orquestación + colectores | ✅ |
 | **F3** | Frontend parametrizado por conglomerado | ⬜ |
 | **F5** | Primera corrida histórica local (6-8h) | ⛔ requiere usuario (service key + laptop) |
 | **F6** | Deploy en Vercel | ⛔ requiere usuario |
@@ -135,9 +135,21 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 
 ---
 
-### F2 — Scraper: NLP y Orquestación ⬜
+### F2 — Scraper: NLP y Orquestación ✅
 
-**Objetivo**: reemplazar Azure por Gemini (cascada), volver declarativo el filtro de relevancia, y orquestar multi-colector con flags. Sin romper la firma `analyze()`.
+**Hecho y verificado (2026-06-10)**:
+- **Python 3.13.13** instalado vía winget (local era 3.14, incompatible con la cadena `supabase`/`greenlet`). `requirements.txt` re-pin: `supabase==2.31.0` (la 2.5.3 chocaba con `httpx>=0.28` que pide `google-genai`). Imports verificados en 3.13: `google-genai 1.75.0`, `supabase 2.31.0`, `feedparser 6.0.11`.
+- `processors/gemini_sentiment.py` 🆕: cascada de 3 niveles (léxico → Gemini → heurístico). Firma `analyze()` preservada. Soporte de **batches** (10 textos/request) para respetar la cuota free de Gemini. El contexto del conglomerado (`disambiguation`) se inyecta en el prompt → `reasoning` queda en `sentiment_score` (criterio #3).
+- `collectors/relevance_filter.py` reescrito como **motor declarativo** (`is_relevant`, `is_relevant_detailed`). Recibe `config: dict` desde BD; aplica `forbidden_terms`, `forbidden_domains`, `geo_requirement`, señales de desambiguación. Wrapper legacy `es_relevante_dominicana(text, slug)` se mantiene para no romper colectores antiguos.
+- Stubs Meta: `instagram_collector.py`, `facebook_collector.py`, `tiktok_collector.py` — devuelven `[]` sin credenciales, mismo contrato que el resto.
+- `main.py` reescrito: flags `--first-run`, `--incremental`, `--all-collectors`, `--collectors`, `--conglomerate`, `--entity-filter`, `--dry-run`. Carga conglomerate + entities + entity_configs joineado. Pipeline: colectores → filtro declarativo → NLP batch → upsert con `content_hash`. Modo `--dry-run` sin BD usa config sintética (no requiere Supabase).
+- `processors/azure_sentiment.py` **eliminado**.
+- **Pruebas unitarias** (4/4 ✅): léxico "jevi" → positive override; "capital expenditure" → rechazado; CAPEX educativo Santiago → aceptado; "Santiago de Chile" → blacklist global.
+- **Smoke test end-to-end** (`--dry-run`, entidad CAPEX): 17 menciones reales de Google News sobre **CAPEX + Zona Franca Santiago** (INFOTEP, Ministerio Público, "Monitores de Paz 2023") aceptadas por el filtro. Reddit 0 (normal para B2B). Meta stubs `[]`. **Criterio #1 PASA.**
+
+**Hallazgo a resolver (no bloqueante)**: la `GEMINI_API_KEY` cargada (`AQ.Ab8RN6...`) responde **429 RESOURCE_EXHAUSTED con `limit: 0`** — esa key no tiene cuota free-tier. La cascada cae al heurístico sin error, así que la pipeline funciona, pero F5 necesitará una key válida de https://aistudio.google.com/apikey para análisis Gemini real.
+
+**Plan original (referencia)**: reemplazar Azure por Gemini (cascada), volver declarativo el filtro de relevancia, y orquestar multi-colector con flags. Sin romper la firma `analyze()`.
 
 **Cómo se hará**:
 - `processors/gemini_sentiment.py` 🆕: clase `SentimentAnalyzer` con **la misma firma** `analyze(text, language) -> dict` (label, scores, confidence, dominican_override, dominican_term, method). Cascada: (1) `detect_dominican_sentiment` override; (2) `google-genai` `gemini-2.0-flash` con prompt contextualizado (incluye `disambiguation` del conglomerado) y `response_mime_type=application/json`; (3) fallback heurístico (portado del `_analyze_demo` actual, que ya es bueno). Incluye `reasoning` en `sentiment_score` para el criterio #3.
@@ -199,7 +211,7 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 ## 5. Pendientes / bloqueos que requieren al usuario
 
 1. ⛔ **`SUPABASE_SERVICE_ROLE_KEY`** del proyecto nuevo → pegar en `scraper/.env`. Necesaria para F5 y F7.
-2. ⚠️ **Validar `GEMINI_API_KEY`**: formato atípico (`AQ.Ab8RN6...` en vez de `AIza...`). Se prueba en F2; si falla, conseguir una en https://aistudio.google.com/apikey.
+2. ⚠️ **Reemplazar `GEMINI_API_KEY`** (CONFIRMADO en F2): devuelve 429 con `limit: 0`. Obtener una nueva en https://aistudio.google.com/apikey y pegarla en `scraper/.env`. Sin esto, F5 funcionará pero con heurístico en lugar de Gemini.
 3. ⬜ Tokens Meta (IG/FB) cuando Meta apruebe la app → habilitar colectores reales (hoy en stub).
 4. ⛔ F5/F6/F7 requieren ejecución/credenciales del usuario (laptop, Vercel, secrets del repo).
 
@@ -214,3 +226,4 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 | 2026-06-10 | Bitácora creada. Remote `claude` configurado hacia `Desarrollo-claude`. F0 publicado (rama `feat/v3-local-first`). |
 | 2026-06-10 | **F1 estructura completada**: migraciones 001–005 aplicadas en `ejivsqgumonogddiftvq`. 7 tablas, RLS activo en todas, lectura pública en las 5 de cara al cliente. Seed 35 + `COUNT` pasan a F4. |
 | 2026-06-10 | **F4 completado**: 35 entidades reales (directorio AEZFC) sembradas en `zona-franca`; 15 priority; entity_configs con `.cl` bloqueado, geo `santiago_rd` y desambiguación CAPEX. `discover_entities.py` listo (compila). |
+| 2026-06-10 | **F2 completado**: Python 3.13 instalado; `gemini_sentiment.py` (cascada+batch), `relevance_filter.py` declarativo, Meta stubs, `main.py` v3 con flags. 4 tests unitarios + dry-run end-to-end OK (17 menciones reales de CAPEX/INFOTEP en Google News). Cascada cayó a heurístico al ver Gemini 429 — funcionando como red de seguridad. |
