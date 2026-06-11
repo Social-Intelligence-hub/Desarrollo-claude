@@ -228,7 +228,13 @@ async def collect_for_entity(plan_item, conglomerate, collectors_active, analyze
         sentiments = analyzer.analyze_batch(texts, entity_config=config, conglomerate=conglomerate)
         for m, s in zip(filtered, sentiments):
             m["sentiment_label"] = s["label"]
-            m["sentiment_score"] = {**s.get("scores", {}), "reasoning": s.get("reasoning", "")}
+            # Guardar también `method` y `dominican_term` para criterio #3 del DEPLOY
+            m["sentiment_score"] = {
+                **s.get("scores", {}),
+                "reasoning": s.get("reasoning", ""),
+                "method": s.get("method", "unknown"),
+                "dominican_term": s.get("dominican_term"),
+            }
             m["confidence_score"] = s.get("confidence", 0.5)
             m["dominican_override"] = s.get("dominican_override", False)
             m["dominican_term_found"] = s.get("dominican_term")
