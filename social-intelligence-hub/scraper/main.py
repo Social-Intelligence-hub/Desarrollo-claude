@@ -160,15 +160,16 @@ async def collect_for_entity(plan_item, conglomerate, collectors_active, analyze
             from collectors.google_alerts import GoogleAlertsCollector
             ga = GoogleAlertsCollector(sentiment_analyzer=None)
             if "google_news" in collectors_active:
-                # Por cada search_query declarada en config, una llamada
-                for q in (config.get("search_queries") or [entity["name"]])[:3]:
+                # Usar todas las search_queries declaradas en config (máx 5)
+                for q in (config.get("search_queries") or [entity["name"]])[:5]:
                     try:
                         raw_mentions.extend(ga.collect_from_google_news(e_slug, search_query=q, max_items=30))
                     except Exception as ex:
                         logger.warning("  google_news '%s' falló: %s", q, ex)
             if "rss" in collectors_active:
                 try:
-                    raw_mentions.extend(ga.collect_from_news_rss(e_slug))
+                    # Pasar config para que use extra_rss_feeds de la BD
+                    raw_mentions.extend(ga.collect_from_news_rss(e_slug, config=config))
                 except Exception as ex:
                     logger.warning("  rss falló: %s", ex)
         except Exception as e:

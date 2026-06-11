@@ -206,36 +206,58 @@ class GoogleAlertsCollector:
 
     # ── Dominican newspaper RSS (stricter filtering) ─────────────────────
 
-    def collect_from_news_rss(self, entity_slug: str) -> list[dict]:
+    def collect_from_news_rss(self, entity_slug: str,
+                              config: dict | None = None) -> list[dict]:
         """
-        Recolecta noticias de feeds RSS públicos de medios dominicanos.
-        Uses strict relevance filtering: requires at least one exact
-        phrase match OR two keyword matches for the entity.
+        Recolecta noticias de feeds RSS de medios dominicanos.
+
+        Prioridad de feeds:
+          1. extra_rss_feeds declarados en entity_config (BD) — específicos por entidad
+          2. PUBLIC_RSS_FEEDS globales (si el slug tiene config legacy)
+
+        Relevancia: usa el filtro declarativo v3 cuando hay config disponible;
+        cae al filtro legacy por slug en caso contrario.
         """
         if not FEEDPARSER_AVAILABLE:
             return []
 
-        if entity_slug not in SEARCH_TERMS:
+        # Feeds a consultar: primero los específicos de la entidad en BD
+        extra_feeds = list((config or {}).get("extra_rss_feeds") or [])
+        legacy_feeds = PUBLIC_RSS_FEEDS.get("noticias-rd", []) \
+            if entity_slug in SEARCH_TERMS else []
+        all_feeds = extra_feeds + [f for f in legacy_feeds if f not in extra_feeds]
+
+        if not all_feeds:
             return []
 
+        # Función de relevancia: usa config declarativo si está disponible
+        from collectors.relevance_filter import is_relevant_detailed
+        def is_ok(text: str) -> bool:
+            if config:
+                return is_relevant_detailed(text, config)["accepted"]
+            return _is_relevant(text, entity_slug)
+
         mentions = []
-        for feed_url in PUBLIC_RSS_FEEDS.get("noticias-rd", []):
+        for feed_url in all_feeds:
             try:
+                logger.info("RSS feed: %s", feed_url)
                 feed = feedparser.parse(feed_url)
+                accepted = 0
                 for entry in feed.entries[:100]:
-                    title = entry.get("title", "")
+                    title   = entry.get("title", "")
                     summary = entry.get("summary", "")
                     combined = f"{title} {summary}"
-
-                    if _is_relevant(combined, entity_slug):
+                    if is_ok(combined):
                         mention = self._parse_feed_entry(
                             entry, entity_slug, source_slug="news_web"
                         )
                         if mention:
                             mentions.append(mention)
-
+                            accepted += 1
+                logger.info("  RSS %s → %d/%d aceptados",
+                            feed_url.split("/")[2], accepted, len(feed.entries))
             except Exception as e:
-                logger.error(f"Error leyendo {feed_url}: {e}")
+                logger.error("Error leyendo %s: %s", feed_url, e)
 
         return mentions
 
