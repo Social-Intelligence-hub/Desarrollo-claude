@@ -40,6 +40,43 @@ except ImportError:
 GEMINI_MODEL = "gemini-2.0-flash"
 BATCH_SIZE = 10  # menciones por request de Gemini (control de cuota: 1500 req/día free)
 
+# ────────────────────────────────────────────────────────────────────────────
+# PROMPT BASE — incrustado aquí para que sea fácil de iterar sin tocar lógica
+# ────────────────────────────────────────────────────────────────────────────
+_DOMINICAN_LEXICON_BLOCK = """
+## LÉXICO DOMINICANO — reglas de interpretación
+
+### Términos POSITIVOS (sin negación previa)
+jevi/jevy/nítido, chévere/bacano/vacano, ta' durísimo, rulay, hevi-nais,
+me la robó/me la roban (="me encanta"), ta' movidú, ta' guay, ta' topú,
+no tiene pierde, candela (calidad), saca chispa, matatán/montro (respeto genuino),
+de ley, tato, yala, e' pa' lante, bien montao, enchulao, de primera.
+
+### Términos NEGATIVOS (inequívocos)
+brigandina (mal hecho), al garete (arruinado), juidero (caos), pariguayo (neg. en corp.),
+boche (crítica severa), la macó (error grave), mojonear/mojoneo (engañar),
+ni en pato (rechazo total), ta' fuera (descartado), me tumbaron/me dejaron a palo/
+me comieron el coco/fue un rata (engaño o estafa), corcho (oportunista no confiable),
+boca-agua (no cumple), picao (ofendido, molesto), emberracao (furioso), desmadre/juidero
+(caos), prendío (fuera de control), manganzón (perezoso), pachá (lento e ineficiente),
+ta pisao (problemas legales), arrebatao/juquiao (descontrolado), en olla (en problemas),
+armao de excusas (lleno de pretextos), quedao (obsoleto), una barbaridad (exagerado/abusivo).
+
+### Términos AMBIGUOS — requieren contexto
+- **tiguere**: positivo si = inteligente/sagaz; negativo si = tramposo/aprovechador.
+- **vaina**: neutro (comodín); el modificador decide: "jevi vaina"=pos, "brigandina vaina"=neg.
+- **dique/dizque**: casi siempre ironía o escepticismo → negativo o neutral leve.
+- **bregar**: neutral (trabajar/lidiar con algo).
+- **janguear**: ocio inocente → neutral; callejear con connotación neg. → negativo.
+
+### Reglas de composición
+1. **Negación** → invierte polaridad: "no está jevi" = NEGATIVO; "ni en pato lo recomiendo" = MUY NEGATIVO.
+2. **Combinación pos+neg** → "mixed": "me la robó pero la macó" = mixed.
+3. **Ironía con dique**: "dique llegaron temprano" = escepticismo → neutral/negativo.
+4. **Intensificadores**: "to' el mundo se queja" amplifica el negativo; "en bola recomienda" amplifica el positivo.
+5. **El sentimiento es HACIA LA EMPRESA analizada**, no hacia el narrador ni el texto en sí.
+""".strip()
+
 
 class SentimentAnalyzer:
     """Analizador de sentimiento en cascada con Gemini 2.0 Flash."""
@@ -82,9 +119,12 @@ class SentimentAnalyzer:
                 "reasoning": f"Detectado vía léxico dominicano: '{dom['term_found']}' ({dom['term_meaning']}).",
             }
 
-        # 2) Gemini con contexto del conglomerado
+        # 2) Gemini con contexto del conglomerado + hints de términos ambiguos
         if self.client:
-            result = self._analyze_gemini(text, entity_config, conglomerate)
+            result = self._analyze_gemini(
+                text, entity_config, conglomerate,
+                ambiguous_hints=dom.get("ambiguous_hints"),
+            )
             if result:
                 return result
 
@@ -157,24 +197,65 @@ class SentimentAnalyzer:
                 parts.append(f"Señales de contexto EQUIVOCADO (homónimos a ignorar): {neg}.")
         return "\n".join(parts) if parts else "Contexto: empresa de zona franca en Santiago, RD."
 
-    def _analyze_gemini(self, text, entity_config, conglomerate) -> dict | None:
-        prompt = f"""Eres un analizador de sentimiento de reputación especializado en español dominicano.
+    def _build_prompt_single(self, text: str, entity_config, conglomerate,
+                              ambiguous_hints: list | None = None) -> str:
+        hints_block = ""
+        if ambiguous_hints:
+            lines = [
+                f'  - "{h["term"]}": {h["meaning"]}. '
+                f'Positivo si: {h["positive_ctx"]}. '
+                f'Negativo si: {h["negative_ctx"]}.'
+                for h in ambiguous_hints
+            ]
+            hints_block = (
+                "\n## TÉRMINOS AMBIGUOS DETECTADOS EN ESTE TEXTO (analiza con cuidado)\n"
+                + "\n".join(lines)
+            )
 
+        return f"""Eres un analista experto en reputación corporativa para empresas de la Corporación \
+Zona Franca de Santiago, República Dominicana. Tu tarea es clasificar el SENTIMIENTO del texto \
+hacia la empresa analizada (no hacia el narrador).
+
+## CONTEXTO DE LA ENTIDAD
 {self._context_block(entity_config, conglomerate)}
 
-Conoces modismos dominicanos: jevi/nítido (excelente), en olla (en problemas), dando carpeta (negligente).
+{_DOMINICAN_LEXICON_BLOCK}
+{hints_block}
 
-Clasifica el sentimiento del siguiente TEXTO hacia la entidad analizada.
-TEXTO: {text}
+## TEXTO A ANALIZAR
+{text}
 
-Responde SOLO con JSON válido:
-{{"label":"positive|negative|neutral|mixed","scores":{{"positive":0.0,"negative":0.0,"neutral":0.0}},"confidence":0.0,"reasoning":"breve, menciona el contexto del conglomerado"}}"""
+Responde SOLO con JSON válido (sin texto adicional):
+{{"label":"positive|negative|neutral|mixed","scores":{{"positive":0.0,"negative":0.0,"neutral":0.0}},\
+"confidence":0.0,"reasoning":"1-2 oraciones: menciona término dominicano detectado y/o contexto del conglomerado"}}"""
+
+    def _build_prompt_batch(self, texts: list[str], entity_config, conglomerate) -> str:
+        numbered = "\n".join(f"{i}. {t}" for i, t in enumerate(texts))
+        return f"""Eres un analista experto en reputación corporativa para empresas de la Corporación \
+Zona Franca de Santiago, República Dominicana. Clasifica el SENTIMIENTO de cada texto hacia \
+la empresa analizada (no hacia el narrador).
+
+## CONTEXTO DE LA ENTIDAD
+{self._context_block(entity_config, conglomerate)}
+
+{_DOMINICAN_LEXICON_BLOCK}
+
+## TEXTOS A ANALIZAR (devuelve un objeto por texto, en el MISMO orden)
+{numbered}
+
+Responde SOLO con un arreglo JSON (sin texto adicional):
+[{{"i":0,"label":"positive|negative|neutral|mixed","scores":{{"positive":0.0,"negative":0.0,"neutral":0.0}},\
+"confidence":0.0,"reasoning":"breve"}}]"""
+
+    def _analyze_gemini(self, text, entity_config, conglomerate,
+                        ambiguous_hints: list | None = None) -> dict | None:
+        prompt = self._build_prompt_single(text, entity_config, conglomerate, ambiguous_hints)
         try:
             resp = self.client.models.generate_content(
                 model=GEMINI_MODEL,
                 contents=prompt,
                 config=genai_types.GenerateContentConfig(
-                    response_mime_type="application/json", temperature=0.2,
+                    response_mime_type="application/json", temperature=0.1,
                 ),
             )
             data = json.loads(resp.text)
@@ -184,22 +265,13 @@ Responde SOLO con JSON válido:
             return None
 
     def _analyze_gemini_batch(self, texts, entity_config, conglomerate) -> list[dict] | None:
-        numbered = "\n".join(f"{i}. {t}" for i, t in enumerate(texts))
-        prompt = f"""Eres un analizador de sentimiento de reputación en español dominicano.
-
-{self._context_block(entity_config, conglomerate)}
-
-Analiza CADA texto numerado y devuelve SOLO un arreglo JSON, un objeto por texto, en el MISMO orden:
-[{{"i":0,"label":"positive|negative|neutral|mixed","scores":{{"positive":0.0,"negative":0.0,"neutral":0.0}},"confidence":0.0,"reasoning":"breve"}}]
-
-TEXTOS:
-{numbered}"""
+        prompt = self._build_prompt_batch(texts, entity_config, conglomerate)
         try:
             resp = self.client.models.generate_content(
                 model=GEMINI_MODEL,
                 contents=prompt,
                 config=genai_types.GenerateContentConfig(
-                    response_mime_type="application/json", temperature=0.2,
+                    response_mime_type="application/json", temperature=0.1,
                 ),
             )
             arr = json.loads(resp.text)
