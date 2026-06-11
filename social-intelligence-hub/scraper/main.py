@@ -259,8 +259,8 @@ def save_mentions(supabase, mentions, entity_map, source_map):
         rec = {k: v for k, v in m.items() if v is not None and k not in ("entity_slug", "source_slug")}
         rec["entity_id"] = e_id
         rec["source_id"] = s_id
-        if isinstance(rec.get("sentiment_score"), dict):
-            rec["sentiment_score"] = json.dumps(rec["sentiment_score"])
+        # NO hacer json.dumps aquí: supabase-py serializa automáticamente,
+        # y un json.dumps previo causa doble-encoding (string dentro de JSONB).
         records.append(rec)
     try:
         result = supabase.table("mentions").upsert(records, on_conflict="content_hash", ignore_duplicates=True).execute()
