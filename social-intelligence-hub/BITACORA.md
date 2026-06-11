@@ -63,7 +63,7 @@
 |------|----------|--------|
 | **F0** | Higiene y seguridad (branch, anon key, deps, .env) | ✅ |
 | **F1** | Schema SQL: estructura 001–005 aplicada + RLS (006 seed → F4) | ✅ |
-| **F4** | Setup Zona Franca (discover_entities + seed 35 empresas) | ⬜ |
+| **F4** | Setup Zona Franca (seed 35 reales + discover_entities.py) | ✅ |
 | **F2** | Scraper: NLP Gemini + orquestación + colectores | ⬜ |
 | **F3** | Frontend parametrizado por conglomerado | ⬜ |
 | **F5** | Primera corrida histórica local (6-8h) | ⛔ requiere usuario (service key + laptop) |
@@ -116,9 +116,15 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 
 ---
 
-### F4 — Setup de Zona Franca ⬜
+### F4 — Setup de Zona Franca ✅
 
 **Objetivo**: poblar `entity_configs` de las 35 empresas con queries de búsqueda y señales de desambiguación, sin tocar código.
+
+**Hecho y verificado (2026-06-10)**:
+- Lista **real** de 35 entidades obtenida del directorio `aezfc.org/directorio-de-afiliados` + `zonafrancasantiago.com` (vía WebFetch), curada por sectores (tabaco, textil, calzado/cuero, electrónica, empaque, logística, parques, unidades CZFS).
+- Migración `006_zona_franca_seed.sql` aplicada: conglomerado `zona-franca` + 35 entidades + 35 `entity_configs` baseline (queries por nombre+contexto, `forbidden_domains=['.cl']`, `geo_requirement='santiago_rd'`, disambiguation; CAPEX con forbidden_terms financieros).
+- `setup/discover_entities.py` creado: herramienta reutilizable (auto-discovery web best-effort + generación de queries/disambiguation con Gemini, `--dry-run`, fallback baseline determinista). Compila OK. El enriquecimiento con IA queda listo para cuando el usuario cargue la service key; el seed ya deja todo funcional sin IA.
+- **Verificación SQL**: `entidades=35`, `priority=15`, `configs=35`, `con_filtro_geo=35`, `capex_query='CAPEX Zona Franca Santiago'`, y los negative_signals de CAPEX incluyen 'capital expenditure'/'gasto de capital'. ✅
 
 **Cómo se hará**:
 - `setup/discover_entities.py` 🆕: script que (a) toma la lista base de empresas (generada desde `PROYECTO.md`: Swisher, Hanesbrands, Grupo M, La Aurora, Arturo Fuente, CAPEX, etc., completada a 35), y (b) por cada entidad llama a **Gemini** para generar `search_queries` + `disambiguation` (señales positivas/negativas). Modo `--dry-run` que imprime swithout escribir, y modo escritura a `entity_configs`.
@@ -207,3 +213,4 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 | 2026-06-10 | **F0 completado**: rama `feat/v3-local-first`; Service Role Key removida del frontend; deps Azure→google-genai; `.env`/`.env.example` (scraper+frontend). Self-check de seguridad OK. |
 | 2026-06-10 | Bitácora creada. Remote `claude` configurado hacia `Desarrollo-claude`. F0 publicado (rama `feat/v3-local-first`). |
 | 2026-06-10 | **F1 estructura completada**: migraciones 001–005 aplicadas en `ejivsqgumonogddiftvq`. 7 tablas, RLS activo en todas, lectura pública en las 5 de cara al cliente. Seed 35 + `COUNT` pasan a F4. |
+| 2026-06-10 | **F4 completado**: 35 entidades reales (directorio AEZFC) sembradas en `zona-franca`; 15 priority; entity_configs con `.cl` bloqueado, geo `santiago_rd` y desambiguación CAPEX. `discover_entities.py` listo (compila). |
