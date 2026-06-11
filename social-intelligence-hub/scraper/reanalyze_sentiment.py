@@ -3,9 +3,9 @@
 Re-analiza el sentimiento de menciones ya guardadas en Supabase.
 
 Útil cuando:
-- Gemini estuvo caído durante la corrida original y todo cayó al heurístico.
+- Groq/LLM estuvo caído durante la corrida original y todo cayó al heurístico.
 - Se quiere actualizar el léxico/prompt y reanalizar lo viejo.
-- Se quiere validar criterio #3 del DEPLOY (% de menciones via Gemini).
+- Se quiere validar criterio #3 del DEPLOY (% de menciones via Groq).
 
 Uso:
     py -3.13 reanalyze_sentiment.py --conglomerate zona-franca
@@ -95,13 +95,13 @@ def main():
 
     analyzer = SentimentAnalyzer()
     if not analyzer.client:
-        logger.error("Gemini no disponible — el script no aporta valor sin el LLM.")
+        logger.error("Groq no disponible — el script no aporta valor sin el LLM.")
         sys.exit(1)
 
     logger.info("Re-analizando %d menciones (only_heuristic=%s, dry_run=%s)",
                 len(mentions), args.only_heuristic, args.dry_run)
 
-    stats = {"updated": 0, "via_gemini": 0, "via_lexico": 0, "via_heuristico": 0, "skipped": 0}
+    stats = {"updated": 0, "via_groq": 0, "via_lexico": 0, "via_heuristico": 0, "skipped": 0}
 
     for i, m in enumerate(mentions, 1):
         text = m.get("text_original") or ""
@@ -120,7 +120,7 @@ def main():
 
         s = analyzer.analyze(text, entity_config=entity_config, conglomerate=conglomerate)
         method = s.get("method", "unknown")
-        stats[f"via_{ {'gemini':'gemini','dominican_lexicon':'lexico','heuristic':'heuristico'}.get(method, 'heuristico') }"] += 1
+        stats[f"via_{ {'groq':'groq','dominican_lexicon':'lexico','heuristic':'heuristico'}.get(method, 'heuristico') }"] += 1
 
         new_score = {
             **s.get("scores", {}),
@@ -140,8 +140,8 @@ def main():
         stats["updated"] += 1
 
         if i % 20 == 0:
-            logger.info("  ... %d/%d (gemini=%d léxico=%d heur=%d)",
-                        i, len(mentions), stats["via_gemini"],
+            logger.info("  ... %d/%d (groq=%d léxico=%d heur=%d)",
+                        i, len(mentions), stats["via_groq"],
                         stats["via_lexico"], stats["via_heuristico"])
 
     logger.info("=" * 60)
