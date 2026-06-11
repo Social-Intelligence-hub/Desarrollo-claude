@@ -52,11 +52,13 @@ ALL_COLLECTORS = ["rss", "google_news", "reddit", "google_reviews", "instagram",
 # Supabase
 # ============================================================
 def get_supabase(dry_run: bool):
-    if dry_run:
-        return None
+    # dry-run aún necesita leer config de la BD; solo se salta los writes.
     url = os.getenv("SUPABASE_URL")
     key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     if not url or not key:
+        if dry_run:
+            logger.warning("Sin credenciales Supabase — dry-run usará config sintético.")
+            return None
         logger.error("Faltan SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY en scraper/.env")
         return None
     try:
@@ -331,7 +333,7 @@ async def run(args):
         mentions = await collect_for_entity(item, conglomerate, collectors_active, analyzer, args)
         total_collected += len(mentions)
         if args.dry_run:
-            for m in mentions[:3]:
+            for m in mentions[:5]:
                 print(f"   · [{m.get('source_slug')}] {m.get('text_original','')[:120]}…")
         else:
             saved = save_mentions(supabase, mentions, entity_map, source_map)
