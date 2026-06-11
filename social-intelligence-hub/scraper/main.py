@@ -212,15 +212,37 @@ async def collect_for_entity(plan_item, conglomerate, collectors_active, analyze
         from collectors.tiktok_collector import TikTokCollector
         raw_mentions.extend(TikTokCollector().collect_for_entity(entity, config))
 
-    # ---- Filtro declarativo v3 ----
-    filtered = []
+    # ---- Filtro heurístico v3 (rápido, sin API) ----
+    heuristic_passed = []
     rejected_summary = {}
     for m in raw_mentions:
         verdict = is_relevant_detailed(m.get("text_original", ""), config)
         if verdict["accepted"]:
-            filtered.append(m)
+            heuristic_passed.append(m)
         else:
             rejected_summary[verdict["reason"]] = rejected_summary.get(verdict["reason"], 0) + 1
+
+    # ---- Juez de relevancia Groq (elimina falsos positivos del heurístico) ----
+    filtered = heuristic_passed
+    groq_rejected = 0
+    if heuristic_passed and analyzer:
+        from processors.groq_relevance import RelevanceChecker
+        relevance_checker = RelevanceChecker()
+        if relevance_checker.client:
+            entity_name = entity.get("name", e_slug)
+            texts_for_check = [m.get("text_original", "") for m in heuristic_passed]
+            verdicts = relevance_checker.check_batch(
+                texts_for_check, entity_name=entity_name,
+                entity_config=config, conglomerate=conglomerate,
+            )
+            filtered = []
+            for m, v in zip(heuristic_passed, verdicts):
+                if v["relevant"]:
+                    filtered.append(m)
+                else:
+                    groq_rejected += 1
+                    logger.debug("  [Groq] RECHAZADO '%s…' — %s",
+                                 m.get("text_original", "")[:60], v["reason"])
 
     # ---- NLP cascada (batch) ----
     if filtered and analyzer:
@@ -228,7 +250,6 @@ async def collect_for_entity(plan_item, conglomerate, collectors_active, analyze
         sentiments = analyzer.analyze_batch(texts, entity_config=config, conglomerate=conglomerate)
         for m, s in zip(filtered, sentiments):
             m["sentiment_label"] = s["label"]
-            # Guardar también `method` y `dominican_term` para criterio #3 del DEPLOY
             m["sentiment_score"] = {
                 **s.get("scores", {}),
                 "reasoning": s.get("reasoning", ""),
@@ -239,8 +260,11 @@ async def collect_for_entity(plan_item, conglomerate, collectors_active, analyze
             m["dominican_override"] = s.get("dominican_override", False)
             m["dominican_term_found"] = s.get("dominican_term")
 
-    logger.info("  [%s] candidatos=%d aceptados=%d rejected=%s",
-                e_slug, len(raw_mentions), len(filtered), rejected_summary or "{}")
+    logger.info(
+        "  [%s] candidatos=%d heurístico=%d groq_rechazados=%d finales=%d rejected=%s",
+        e_slug, len(raw_mentions), len(heuristic_passed),
+        groq_rejected, len(filtered), rejected_summary or "{}",
+    )
     return filtered
 
 
