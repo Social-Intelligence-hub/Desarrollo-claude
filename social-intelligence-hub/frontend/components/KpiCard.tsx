@@ -96,7 +96,7 @@ export function KpiCard({
         )}
       </div>
 
-      {/* Indicador de filtro activo */}
+
       {active && onClick && (
         <p className="text-[10px] font-semibold mt-2" style={{ color: accentColor }}>
           Filtro activo — clic para limpiar

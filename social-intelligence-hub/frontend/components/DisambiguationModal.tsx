@@ -58,7 +58,7 @@ export function DisambiguationModal({
 
   return createPortal(
     <>
-      {/* Backdrop separado del modal para evitar problemas de z-index */}
+
       <div
         style={{
           position: "fixed",
@@ -69,7 +69,7 @@ export function DisambiguationModal({
         onClick={onClose}
       />
 
-      {/* Modal centrado */}
+
       <div
         style={{
           position: "fixed",
@@ -83,7 +83,7 @@ export function DisambiguationModal({
         }}
       >
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-200">
-          {/* Header */}
+
           <div className="flex items-start gap-3 p-6 pb-4 border-b border-gray-100">
             <div className="p-2 rounded-lg bg-amber-50 border border-amber-200 flex-shrink-0">
               <HelpCircle className="h-5 w-5 text-amber-600" />
@@ -106,7 +106,7 @@ export function DisambiguationModal({
             </button>
           </div>
 
-          {/* Opciones */}
+
           <div className="p-6 space-y-3">
             {OPTIONS.map((option) => {
               const Icon = option.icon;

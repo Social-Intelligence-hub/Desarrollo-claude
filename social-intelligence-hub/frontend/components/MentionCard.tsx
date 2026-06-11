@@ -79,7 +79,9 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
       await navigator.clipboard.writeText(mention.source_url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {/* silenciar */ }
+    } catch {
+      // swallow: clipboard failures are non-critical
+    }
   };
 
   return (
@@ -90,9 +92,9 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
         className
       )}
     >
-      {/* ── Header ── */}
+
       <div className={cn("flex items-start gap-3", compact ? "p-3" : "p-4")}>
-        {/* Avatar */}
+
         <div className="flex-shrink-0">
           {mention.author_avatar_url ? (
             <img
@@ -110,14 +112,14 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
           )}
         </div>
 
-        {/* Meta */}
+
         <div className="flex-1 min-w-0">
           <div className="flex items-center flex-wrap gap-1.5 mb-0.5">
             <span className="font-semibold text-sm text-foreground truncate">
               {mention.author_name ?? "Anónimo"}
             </span>
 
-            {/* Fuente */}
+
             <span
               className="text-xs px-2 py-0.5 rounded font-medium border"
               style={{
@@ -129,17 +131,17 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
               {sourceName}
             </span>
 
-            {/* Entidad */}
+
             <span className="text-xs px-2 py-0.5 rounded font-medium border bg-slate-100 text-slate-700 border-slate-200">
               {mention.entities?.name ?? "General"}
             </span>
 
-            {/* Idioma */}
+
             <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-mono border">
               {langLabel}
             </span>
 
-            {/* Revisión Humana Badge */}
+
             {(mention.confidence_score ?? 1) < 0.75 && (
               <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-600 font-bold border border-amber-200 uppercase tracking-tight flex items-center gap-1 shadow-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
@@ -148,13 +150,13 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
             )}
           </div>
 
-          {/* Fecha */}
+
           <p className="text-xs text-muted-foreground">
             {formatRelativeDate(mention.published_at ?? mention.collected_at)}
           </p>
         </div>
 
-        {/* Sentimiento (Manual Selector) */}
+
         <div className="flex flex-col items-end gap-1">
           <div className="flex items-center gap-1">
             <div className="flex items-center gap-1 bg-slate-50 border rounded-lg p-0.5">
@@ -166,8 +168,8 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                   title={`Cambiar a ${label}`}
                   className={cn(
                     "w-6 h-6 rounded-md flex items-center justify-center transition-all",
-                    currentSentiment === label 
-                      ? "bg-white shadow-sm border scale-110" 
+                    currentSentiment === label
+                      ? "bg-white shadow-sm border scale-110"
                       : "text-slate-400 hover:text-slate-600 grayscale opacity-60 hover:opacity-100"
                   )}
                 >
@@ -177,8 +179,8 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                 </button>
               ))}
             </div>
-            
-            {/* Botón de rechazo / irrelevante */}
+
+
             <div className="relative">
               {showRejectMenu && (
                 <div className="absolute right-0 top-8 w-48 bg-white border shadow-lg rounded-md z-10 p-1 flex flex-col gap-1 text-sm animate-in fade-in zoom-in-95">
@@ -219,7 +221,7 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                       {reason}
                     </button>
                   ))}
-                  <button 
+                  <button
                     onClick={() => setShowRejectMenu(false)}
                     className="text-center px-2 py-1.5 mt-1 text-xs text-slate-400 hover:text-slate-600 border-t"
                   >
@@ -237,7 +239,7 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
               </button>
             </div>
           </div>
-          <span 
+          <span
             className="text-[10px] font-bold uppercase tracking-wider"
             style={{ color: sentimentConfig.color }}
           >
@@ -246,7 +248,7 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
         </div>
       </div>
 
-      {/* ── Estrellas (Google Reviews) ── */}
+
       {mention.star_rating != null && (
         <div className="flex items-center gap-0.5 px-4 pb-1.5">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -277,10 +279,10 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
         </p>
       </div>
 
-      {/* ── Pie: Confianza NLP + Enlace a fuente original ── */}
+
       <div className="px-4 py-2.5 border-t bg-muted/20 rounded-b-xl flex items-center justify-between gap-3 flex-wrap">
 
-        {/* Confianza del análisis */}
+
         {mention.confidence_score != null && (
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">Confianza:</span>
@@ -299,11 +301,11 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
           </div>
         )}
 
-        {/* Enlace directo a la publicación original */}
+
         <div className="flex items-center gap-1.5 ml-auto">
           {mention.source_url && (
             <>
-              {/* Copiar URL */}
+
               <button
                 onClick={handleCopyUrl}
                 title="Copiar enlace al portapapeles"
@@ -315,7 +317,7 @@ export function MentionCard({ mention, className, compact = false }: MentionCard
                 }
               </button>
 
-              {/* Abrir fuente */}
+
               <a
                 href={mention.source_url}
                 target="_blank"

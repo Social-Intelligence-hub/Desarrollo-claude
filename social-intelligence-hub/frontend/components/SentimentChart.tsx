@@ -232,10 +232,10 @@ export function EntitiesComparisonChart({
   }
 
   const chartData = summaries.map((s) => {
-    const netScore = s.total_mentions > 0 
-      ? Math.round(((s.positive_count - s.negative_count) / s.total_mentions) * 100) 
+    const netScore = s.total_mentions > 0
+      ? Math.round(((s.positive_count - s.negative_count) / s.total_mentions) * 100)
       : 0;
-    
+
     return {
       name:      s.entity_name.length > 18 ? s.entity_name.substring(0, 16) + "…" : s.entity_name,
       slug:      s.entity_slug,
@@ -310,7 +310,7 @@ export function EntitiesComparisonChart({
         </BarChart>
       </ResponsiveContainer>
 
-      {/* Mini tabla de ranking rápida */}
+
       <div className="mt-4 space-y-2">
         {chartData.sort((a, b) => b.netScore - a.netScore).map((item, idx) => (
           <div

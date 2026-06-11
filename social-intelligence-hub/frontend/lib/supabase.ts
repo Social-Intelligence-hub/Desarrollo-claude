@@ -367,6 +367,58 @@ export async function updateMentionSentiment(id: string, label: SentimentLabel):
   }
 }
 
+// ============================================================
+// v3 — Conglomerados
+// ============================================================
+
+export interface Conglomerate {
+  id: string;
+  slug: string;
+  name: string;
+  category: string;
+  website?: string;
+  context_description: string;
+  logo_url?: string;
+  primary_geo?: string;
+  active: boolean;
+}
+
+/** Devuelve el conglomerado por slug (filtrado por active=TRUE). */
+export async function fetchConglomerate(slug: string): Promise<Conglomerate | null> {
+  const { data, error } = await supabase
+    .from("conglomerates")
+    .select("*")
+    .eq("slug", slug)
+    .eq("active", true)
+    .maybeSingle();
+  if (error) {
+    console.error("fetchConglomerate error:", error.message);
+    return null;
+  }
+  return (data as Conglomerate) ?? null;
+}
+
+/** Entidades del conglomerado, ordenadas: priority primero, luego por nombre. */
+export async function fetchEntitiesByConglomerate(
+  conglomerateSlug: string
+): Promise<Entity[]> {
+  // Resolución indirecta (slug → id) para mantenerlo tipado simple.
+  const cong = await fetchConglomerate(conglomerateSlug);
+  if (!cong) return [];
+  const { data, error } = await supabase
+    .from("entities")
+    .select("*")
+    .eq("conglomerate_id", cong.id)
+    .eq("active", true)
+    .order("priority", { ascending: false })
+    .order("name");
+  if (error) {
+    console.error("fetchEntitiesByConglomerate error:", error.message);
+    return [];
+  }
+  return data || [];
+}
+
 export async function fetchEntityBySlug(slug: string): Promise<Entity | null> {
   const { data, error } = await supabase
     .from("entities")

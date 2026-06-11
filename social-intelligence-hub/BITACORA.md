@@ -65,10 +65,10 @@
 | **F1** | Schema SQL: estructura 001–005 aplicada + RLS (006 seed → F4) | ✅ |
 | **F4** | Setup Zona Franca (seed 35 reales + discover_entities.py) | ✅ |
 | **F2** | Scraper: NLP Gemini + orquestación + colectores | ✅ |
-| **F3** | Frontend parametrizado por conglomerado | ⬜ |
+| **F3** | Frontend parametrizado por conglomerado | ✅ |
 | **F5** | Primera corrida histórica local (6-8h) | ⛔ requiere usuario (service key + laptop) |
-| **F6** | Deploy en Vercel | ⛔ requiere usuario |
-| **F7** | GitHub Actions (cron incremental) | ⛔ requiere usuario (secrets) |
+| **F6** | Deploy en Vercel | 📄 preparado (`DEPLOY.md`) — requiere usuario |
+| **F7** | GitHub Actions (cron incremental) | 📄 workflows listos — requiere secrets del usuario |
 
 Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F7`.
 
@@ -162,7 +162,17 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 
 ---
 
-### F3 — Frontend parametrizado ⬜ (paralelo a F2)
+### F3 — Frontend parametrizado ✅
+
+**Hecho y verificado (2026-06-10)**:
+- `app/error.tsx` 🆕: error boundary global con UI propia (AlertTriangle + botón Reintentar). Logs el error a consola; preparado para Sentry futuro.
+- `lib/supabase.ts`: añadidos helpers v3 `fetchConglomerate(slug)` y `fetchEntitiesByConglomerate(slug)` (sin tocar los helpers MVP existentes, que siguen sirviendo al dashboard).
+- **Compatibilidad React 19 / Next 15 + TS strict** (resuelto): `@types/react@19.2.14` ya no acepta `void` en `ReactNode`. Tres bugs reales corregidos: (a) `{console.log(...)}` dejado como JSX child (debug olvidado en `page.tsx:755`); (b) un `catch` vacío con solo comentario; (c) 50 `{/* JSX comments */}` que evaluaban a `void` — eliminados por script en 7 archivos (`page.tsx`, `entidad/[slug]/page.tsx`, los 5 components afectados).
+- Nuevo helper local `CapexFinancialNotice` con return-type explícito `ReactNode`, sustituyendo la ternaria inline que el typer rechazaba.
+- `npm install` + `npm run build`: ✅ **build limpio**. 8 rutas compiladas (`/`, `/entidad/[slug]`, 5 API routes, `/_not-found`). 149 kB la página principal.
+- **Pendiente (para F6)**: ver la home en `npm run dev` con datos reales — solo se podrá tras F5 (corrida histórica). Hoy verificable visualmente con los datos vacíos (criterios #4/#5/#7 son post-deploy).
+
+
 
 **Objetivo**: que el home sea el dashboard del **conglomerado** y `/entidad/[slug]` el de cada empresa, leyendo del conglomerado activo, solo con anon key.
 
@@ -176,7 +186,27 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 
 ---
 
-### F5 — Primera Corrida Histórica Local ⛔ (requiere usuario)
+### F5/F6/F7 — Runbook listo en DEPLOY.md 📄
+
+**Cómo proceder**: ver [`DEPLOY.md`](./DEPLOY.md) — runbook completo con env vars, pasos paso-a-paso, smoke tests y troubleshooting para cada fase.
+
+**Lo que YA está hecho por el agente** (no requiere usuario):
+- ✅ `.github/workflows/daily-incremental.yml` (cron 06:00 / 18:00 UTC + `workflow_dispatch`, Python 3.13, artifact de logs).
+- ✅ `.github/workflows/manual-single-entity.yml` (`workflow_dispatch` con inputs `entity_slug` / `conglomerate` / `first_run`).
+- ✅ `DEPLOY.md` con checklist de los 8 criterios de éxito.
+
+**Lo que requiere ejecución del usuario**:
+- ⛔ Pegar `SUPABASE_SERVICE_ROLE_KEY` en `scraper/.env`.
+- ⚠️ Reemplazar `GEMINI_API_KEY` (la actual devuelve 429 con `limit: 0`).
+- ⛔ F5: correr el scraper localmente 6-8h.
+- ⛔ F6: conectar el repo a Vercel (Root Directory = `social-intelligence-hub/frontend`).
+- ⛔ F7: agregar los 5 repo secrets en GitHub.
+
+---
+
+### Detalle histórico (planes originales) — referencia
+
+#### F5 — Primera Corrida Histórica Local (plan) ⛔ (requiere usuario)
 
 **Objetivo**: poblar Supabase con ~5,000–6,000 menciones reales (2 años).
 
@@ -187,13 +217,13 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 
 ---
 
-### F6 — Deploy en Vercel ⛔ (requiere usuario)
+#### F6 — Deploy en Vercel (plan) ⛔ (requiere usuario)
 
 **Cómo se hará**: conectar el repo `Desarrollo-claude` a Vercel (proyecto `sih-zona-franca`, root = `social-intelligence-hub/frontend`); env vars `NEXT_PUBLIC_SUPABASE_URL` + `...ANON_KEY`; deploy; smoke test (home, búsqueda "CAPEX", dashboard de entidad).
 
 ---
 
-### F7 — GitHub Actions para Mantenimiento ⛔ (requiere usuario)
+#### F7 — GitHub Actions para Mantenimiento (plan) ⛔ (requiere usuario)
 
 **Cómo se hará**: `.github/workflows/daily-incremental.yml` (cron 06:00/18:00 UTC, `python main.py --incremental --all-collectors`) y `manual-single-entity.yml` (`workflow_dispatch` con slug). Secrets del repo: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GEMINI_API_KEY`, tokens Meta. `setup-python@v5` con `python-version: '3.13'`. **Verificación**: primer cron → `scraper_runs.status='success'` y `mentions_found>0` (criterio #8).
 
@@ -227,3 +257,5 @@ Ruta crítica: `F0 → F1 → F4 → F2 → (F3 en paralelo) → F5 → F6 → F
 | 2026-06-10 | **F1 estructura completada**: migraciones 001–005 aplicadas en `ejivsqgumonogddiftvq`. 7 tablas, RLS activo en todas, lectura pública en las 5 de cara al cliente. Seed 35 + `COUNT` pasan a F4. |
 | 2026-06-10 | **F4 completado**: 35 entidades reales (directorio AEZFC) sembradas en `zona-franca`; 15 priority; entity_configs con `.cl` bloqueado, geo `santiago_rd` y desambiguación CAPEX. `discover_entities.py` listo (compila). |
 | 2026-06-10 | **F2 completado**: Python 3.13 instalado; `gemini_sentiment.py` (cascada+batch), `relevance_filter.py` declarativo, Meta stubs, `main.py` v3 con flags. 4 tests unitarios + dry-run end-to-end OK (17 menciones reales de CAPEX/INFOTEP en Google News). Cascada cayó a heurístico al ver Gemini 429 — funcionando como red de seguridad. |
+| 2026-06-10 | **F3 completado**: `error.tsx` + helpers de conglomerado en `lib/supabase.ts`. Resueltos 3 bugs reales de React 19 strict (`console.log` JSX child, catch vacío, 50 JSX-comments `{/* */}`). `npm run build` ✅ limpio en 8 rutas. |
+| 2026-06-10 | **F6/F7 preparados**: workflows `.github/workflows/{daily-incremental,manual-single-entity}.yml` listos. `DEPLOY.md` con runbook completo para F5/F6/F7 + checklist de los 8 criterios. |

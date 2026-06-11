@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import {
   BarChart2, Bell, RefreshCw, Globe,
@@ -94,6 +94,25 @@ const MENTIONS_PER_PAGE = 12;
 // ─────────────────────────────────────────────────────────────
 // Component
 // ─────────────────────────────────────────────────────────────
+// Aviso visual cuando el usuario aclara que buscaba CAPEX financiero (fuera de scope).
+function CapexFinancialNotice({ show }: { show: boolean }): ReactNode {
+  if (!show) return null;
+  return (
+    <div className="mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50 flex items-start gap-3">
+      <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+      <div>
+        <p className="text-sm font-semibold text-amber-800">
+          CAPEX financiero está fuera del ámbito de monitoreo
+        </p>
+        <p className="text-xs text-amber-700 mt-0.5">
+          Este hub monitorea CZFS y CAPEX como institución educativa.
+          Para Capital Expenditure, usa herramientas financieras especializadas.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [state, setState] = useState<DashboardState>(INITIAL_STATE);
   const feedRef = useRef<HTMLDivElement>(null);
@@ -286,7 +305,7 @@ export default function DashboardPage() {
       newEntity = "capex-institucion";
       // No vaciamos el query si tiene más que solo "capex"
       if (query.toLowerCase().trim() === "capex") {
-        newQuery = ""; 
+        newQuery = "";
       }
     }
 
@@ -434,11 +453,11 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background">
 
-      {/* ────── HEADER ────── */}
+
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between sm:gap-4 gap-3">
 
-          {/* Brand */}
+
           <div className="flex items-center gap-2.5 flex-shrink-0 order-1">
             <div className="p-1.5 rounded-lg bg-czfs-blue">
               <BarChart2 className="h-5 w-5 text-white" />
@@ -453,7 +472,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Search */}
+
           <div className="flex-1 min-w-[280px] w-full sm:max-w-xl order-3 sm:order-2 header-search">
             <SearchBar
               onSearch={handleSearch}
@@ -462,7 +481,7 @@ export default function DashboardPage() {
             />
           </div>
 
-          {/* Acciones */}
+
           <div className="flex items-center gap-2 flex-shrink-0 order-2 sm:order-3">
             {state.lastUpdated && (
               <span className="text-xs text-muted-foreground hidden md:block">
@@ -496,7 +515,7 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* ────── BANNER ESTADO DB ────── */}
+
       {state.dbConnected === false && (
         <div className="bg-red-50 border-b border-red-200 px-4 py-2.5">
           <div className="max-w-7xl mx-auto flex items-center gap-2 text-sm text-red-700">
@@ -507,7 +526,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* ────── BANNER ERROR STATS ────── */}
+
       {state.errorStats && state.dbConnected !== false && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5">
           <div className="max-w-7xl mx-auto flex items-center gap-2 text-sm text-amber-700">
@@ -520,7 +539,7 @@ export default function DashboardPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-7">
 
-        {/* ────── FILTRO DE PERÍODO ────── */}
+
         <section className="bg-card border rounded-xl px-5 py-3.5 shadow-sm">
           <DateRangeFilter
             value={state.dateRange}
@@ -528,7 +547,7 @@ export default function DashboardPage() {
           />
         </section>
 
-        {/* ────── KPIs ────── */}
+
         <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -541,7 +560,7 @@ export default function DashboardPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-            {/* Gauge Sentimiento Neto */}
+
             <div className="col-span-2 md:col-span-1">
               <NetSentimentCard
                 score={state.stats?.netSentiment ?? 0}
@@ -598,7 +617,7 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* ────── GRÁFICOS ────── */}
+
         <section>
           <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">
@@ -660,7 +679,7 @@ export default function DashboardPage() {
           )}
         </section>
 
-        {/* ────── FEED ────── */}
+
         <section ref={feedRef}>
           <div className="flex items-start justify-between mb-3 flex-wrap gap-3">
             <div>
@@ -703,7 +722,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Aviso búsqueda en vivo */}
+
           {state.searchingLive && (
             <div className="mb-4 p-3 rounded-xl border border-blue-200 bg-blue-50 flex items-center gap-2 text-sm text-blue-700">
               <Zap className="h-4 w-4 animate-pulse flex-shrink-0" />
@@ -717,23 +736,8 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Aviso CAPEX financiero */}
-          {state.capexType === "financial" ? (
-            <div className="mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50 flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-amber-800">
-                  CAPEX financiero está fuera del ámbito de monitoreo
-                </p>
-                <p className="text-xs text-amber-700 mt-0.5">
-                  Este hub monitorea CZFS y CAPEX como institución educativa.
-                  Para Capital Expenditure, usa herramientas financieras especializadas.
-                </p>
-              </div>
-            </div>
-          ) : null}
+          <CapexFinancialNotice show={state.capexType === "financial"} />
 
-          {/* Error mentions */}
           {state.errorMentions && !state.loadingMentions && (
             <div className="mb-4 p-4 rounded-xl border border-red-200 bg-red-50 flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
@@ -747,8 +751,7 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Grid de menciones */}
-          {console.log("Mentions in render:", state.mentions)}
+
           {state.loadingMentions ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 max-w-7xl mx-auto">
               {Array.from({ length: 6 }).map((_, i) => <MentionCardSkeleton key={i} />)}
@@ -775,7 +778,7 @@ export default function DashboardPage() {
             </div>
           ) : null}
 
-          {/* Paginación */}
+
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-3 mt-6">
               <button
@@ -801,7 +804,7 @@ export default function DashboardPage() {
           )}
         </section>
 
-        {/* ────── FOOTER ────── */}
+
         <footer className="border-t pt-5 pb-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
@@ -812,7 +815,7 @@ export default function DashboardPage() {
               <span>v0.1.0</span>
             </div>
             <div className="flex items-center gap-4">
-              {/* Indicador de conexión real */}
+
               <span className="flex items-center gap-1">
                 {state.dbConnected === null && (
                   <span className="h-2 w-2 rounded-full bg-yellow-400 inline-block animate-pulse" />

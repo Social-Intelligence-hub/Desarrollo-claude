@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useCallback, use } from "react";
 import Link from "next/link";
-import { 
-  ChevronLeft, Globe, ThumbsUp, ThumbsDown, Minus, 
+import {
+  ChevronLeft, Globe, ThumbsUp, ThumbsDown, Minus,
   TrendingUp, BarChart3, MessageSquare, Calendar
 } from "lucide-react";
-import { 
-  fetchEntityBySlug, 
-  fetchTotalStats, 
-  fetchDailyTrend, 
+import {
+  fetchEntityBySlug,
+  fetchTotalStats,
+  fetchDailyTrend,
   fetchMentions,
   fetchSourceStats,
   type Entity,
@@ -27,7 +27,7 @@ interface EntityPageProps {
 
 export default function EntityDetailPage({ params }: EntityPageProps) {
   const { slug } = use(params);
-  
+
   const [entity, setEntity] = useState<Entity | null>(null);
   const [stats, setStats] = useState<any>(null);
   const [trends, setTrends] = useState<DailyTrend[]>([]);
@@ -45,7 +45,7 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
         fetchMentions({ entitySlug: slug, limit: 10 }),
         fetchSourceStats(slug)
       ]);
-      
+
       setEntity(e);
       setStats(s);
       setTrends(t);
@@ -79,8 +79,8 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
         <div className="text-center p-8 bg-white rounded-2xl shadow-xl border border-slate-200">
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Entidad no encontrada</h1>
           <p className="text-slate-500 mb-6">No pudimos encontrar información para "{slug}"</p>
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-czfs-blue text-white rounded-xl font-semibold hover:bg-czfs-blue/90 transition-all shadow-md hover:shadow-lg active:scale-95"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -93,12 +93,12 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      {/* ── HEADER DE ENTIDAD ── */}
+
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-500"
               title="Volver"
             >
@@ -114,7 +114,7 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
               <p className="text-xs text-slate-500">Análisis detallado de reputación y menciones</p>
             </div>
           </div>
-          
+
           <div className="hidden md:flex items-center gap-4">
             <div className="text-right">
               <p className="text-[10px] font-bold text-slate-400 uppercase">Estado</p>
@@ -128,23 +128,23 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-        
-        {/* ── KPIs PRINCIPALES ── */}
+
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <NetSentimentCard 
+          <NetSentimentCard
             score={stats?.netSentiment ?? 0}
             totalMentions={stats?.totalMentions ?? 0}
           />
-          
-          <KpiCard 
+
+          <KpiCard
             title="Alcance Total"
             value={formatNumber(stats?.totalMentions ?? 0)}
             subtitle="menciones detectadas"
             icon={<Globe className="h-4 w-4" />}
             accentColor="#1E3A8A"
           />
-          
-          <KpiCard 
+
+          <KpiCard
             title="Impacto Positivo"
             value={formatNumber(stats?.positiveCount ?? 0)}
             subtitle={`${stats?.totalMentions > 0 ? Math.round((stats.positiveCount / stats.totalMentions) * 100) : 0}% del volumen`}
@@ -152,7 +152,7 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
             accentColor="#059669"
           />
 
-          <KpiCard 
+          <KpiCard
             title="Riesgo / Negativo"
             value={formatNumber(stats?.negativeCount ?? 0)}
             subtitle="requiere atención"
@@ -162,8 +162,8 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* ── GRÁFICO DE TENDENCIA ── */}
+
+
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex items-center justify-between mb-6">
@@ -172,13 +172,13 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
                   <h2 className="text-lg font-bold text-slate-900">Evolución Temporal</h2>
                 </div>
               </div>
-              <TrendChart 
-                data={trends} 
+              <TrendChart
+                data={trends}
                 entitySlug={slug}
               />
             </div>
 
-            {/* ── FEED DE MENCIONES (Drill-down) ── */}
+
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -189,13 +189,13 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
                   Mostrando las últimas 10
                 </span>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {mentions.map((m) => (
                   <MentionCard key={m.id} mention={m} compact />
                 ))}
               </div>
-              
+
               {mentions.length === 0 && (
                 <div className="bg-white border-2 border-dashed border-slate-200 rounded-2xl py-16 text-center">
                   <p className="text-slate-400 font-medium">No hay menciones recientes para esta entidad.</p>
@@ -204,7 +204,7 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
             </div>
           </div>
 
-          {/* ── SIDEBAR: FUENTES Y META ── */}
+
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex items-center gap-2 mb-6 text-slate-900">
@@ -219,8 +219,8 @@ export default function EntityDetailPage({ params }: EntityPageProps) {
                       <span className="text-slate-500 font-mono text-xs">{source.count}</span>
                     </div>
                     <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-czfs-blue rounded-full" 
+                      <div
+                        className="h-full bg-czfs-blue rounded-full"
                         style={{ width: `${(source.count / (stats?.totalMentions || 1)) * 100}%` }}
                       />
                     </div>

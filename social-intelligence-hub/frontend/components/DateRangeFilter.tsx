@@ -53,7 +53,7 @@ export function DateRangeFilter({ value, onChange, className }: DateRangeFilterP
   return (
     <div className={cn("flex flex-col gap-2", className)}>
 
-      {/* Fila de presets */}
+
       <div className="flex items-center gap-2 flex-wrap">
         <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
           <Calendar className="h-3.5 w-3.5" />
@@ -76,7 +76,7 @@ export function DateRangeFilter({ value, onChange, className }: DateRangeFilterP
             </button>
           ))}
 
-          {/* Limpiar filtro de fecha */}
+
           {isFiltered && (
             <button
               onClick={handleClear}
@@ -88,7 +88,7 @@ export function DateRangeFilter({ value, onChange, className }: DateRangeFilterP
           )}
         </div>
 
-        {/* Etiqueta del rango activo */}
+
         {rangeLabel && value.preset !== "custom" && (
           <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded border">
             {rangeLabel}
@@ -96,7 +96,7 @@ export function DateRangeFilter({ value, onChange, className }: DateRangeFilterP
         )}
       </div>
 
-      {/* Inputs personalizados */}
+
       {showCustom && (
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs text-muted-foreground">Desde:</span>
